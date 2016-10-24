@@ -1,0 +1,86 @@
+@font-face {
+  font-family: HFNSS;
+  src: url("./hfnss.ttf");
+}
+@font-face {
+  font-family: HFGAM;
+  src: url("./HFGAM.ttf");
+}
+@font-face {
+  font-family: HFTIN;
+  src: url("./HFTIN.ttf");
+}
+body {
+  background-color: #030907;
+  margin: 0;
+  padding: 0;
+}
+.main {
+  margin: auto;
+  width: 1363;
+}
+.row {
+  height: 13px;
+  width: 100%;
+  margin: 2px;
+  margin-left: 1px;
+  float: left;
+}
+.column {
+  width: 40px;
+  height: 13px;
+  border: 1px #54574d solid;
+  margin: 1px;
+  float: left;
+}
+.column.highlight {
+  background: #807872;
+}
+.column.index {
+  border: 1px #807872 solid;
+  background: #2a2c27;
+}
+.point {
+  margin: 0;
+  position: relative;
+  font-family: HFNSS;
+  color: #b0a69a;
+  -webkit-font-smoothing: none;
+  font-size: 2em;
+  font-smooth: none;
+}
+.tracker {
+  position: relative;
+  border: 1px #54574d solid;
+  width: 442px;
+  height: 850px;
+  float: left;
+  margin: 5px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.index-cell {
+  font-family: HFTIN;
+  font-size: 1em;
+  color: #b0a69a;
+  margin: 0;
+  margin-top: 2px;
+  font-smooth: none;
+  -webkit-font-smoothing: none;
+  text-align: center;
+}
+.cell {
+  background: none;
+  width: 40px;
+  border: none;
+  outline: none;
+  font-family: HFTIN;
+  font-size: 1em;
+  color: #b0a69a;
+  font-smooth: none;
+  -webkit-font-smoothing: none;
+  padding-left: 2px;
+}
+.cell.highlight {
+  color: #000;
+}
