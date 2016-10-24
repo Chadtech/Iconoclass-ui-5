@@ -5,6 +5,7 @@ import Types            exposing (..)
 import Ports            exposing (..)
 import View             exposing (view)
 import Init             exposing (initialModel)
+import TrackerTypes
 import Tracker
 import Dict             exposing (get)
 import Maybe            exposing (withDefault)
@@ -35,7 +36,7 @@ update message model =
       in
       (model, Cmd.none)
 
-dummyTracker : Tracker.Model
+dummyTracker : TrackerTypes.Model
 dummyTracker =
   { radix = 16
   , data  = [ [ "ERROR" ] ]

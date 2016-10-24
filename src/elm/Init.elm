@@ -2,7 +2,7 @@ module Init exposing (initialModel)
 
 import Types exposing (..)
 import Aliases exposing (..)
-import Tracker
+import TrackerTypes as Tracker
 import List exposing (repeat)
 import Dict exposing (Dict, fromList)
 

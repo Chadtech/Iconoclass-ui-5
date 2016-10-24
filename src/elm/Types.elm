@@ -3,7 +3,7 @@ module Types exposing (..)
 import List exposing (repeat)
 import Aliases exposing (..)
 import Dict exposing (Dict)
-import Tracker
+import TrackerTypes as Tracker
 
 type Msg 
   = TrackerMsg String Tracker.Msg

@@ -1,6 +1,6 @@
 module Aliases exposing (..)
 
---import List
+import Array exposing (Array)
 
 type alias Sheet = List Row
 
