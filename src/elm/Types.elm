@@ -1,29 +1,16 @@
 module Types exposing (..)
 
 import List exposing (repeat)
+import Aliases exposing (..)
 import Dict exposing (Dict)
+import Tracker
 
 type Msg 
-  = UpdateCell Index Index String
+  = TrackerMsg String Tracker.Msg
 
 
 type alias Model =
-  { sheets : Dict String Sheet }
-
-type alias Sheet = List Row
-
-type alias Tracker =
-  { radix     : Int
-  , data      : Sheet
-  , sheetName : String
+  { sheets : Dict String Sheet 
+  , trackerModels : Dict String Tracker.Model
   }
 
-type alias Index = Int
-type alias Row   = List String
-type alias Radix = Int
-type alias Cells = List Cell
-type alias Cell  =
-  { ri      : Int
-  , ci      : Int
-  , content : String
-  }

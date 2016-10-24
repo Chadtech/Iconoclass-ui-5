@@ -1,23 +1,53 @@
-module Tracker exposing (trackerView)
+module Tracker exposing (..)
 
 import Html             exposing (..)
 import Html.Attributes  exposing (..)
 import Html.Events      exposing (..)
 import Html.App         as App
-import Types            exposing (..)
+--import Types            exposing (Sheet)
+import Aliases          exposing (..)
 import List             exposing (map, map2, repeat, length, append, head, tail)
 import Maybe            exposing (withDefault, Maybe)
 import String           exposing (uncons)
 import Dict             exposing (fromList, Dict, get)
 import Util             exposing (numberToHexString, trimZeros)
+import Debug
+
+type alias Model =
+  { radix     : Int
+  , data      : Sheet
+  , sheetName : String
+  }
+
+initialModel : Model
+initialModel = 
+  { data =
+      repeat 9 ""
+      |>repeat 256
+  , radix = 16
+  , sheetName = "none"
+  }
+
+type Msg 
+  = UpdateRadix Int
+  | UpdateCell Index Index String
 
 
+update : Msg -> Model -> Model
+update message model =
+  case message of
+    UpdateCell ri ci newContent ->
+      model
 
-trackerView : Tracker  -> Html Msg
-trackerView {data, radix} =
+    _ ->
+      model
+
+view : Model -> Html Msg
+view {data, radix, sheetName} =
   toCells data
-  |>map (rowView radix)
+  |>map (rowView sheetName radix)
   |>div [ class "tracker" ]
+
 
 -- Tracker data formatting
 
@@ -38,10 +68,10 @@ columnToCell ri content ci =
 -- ####### Row
 -- ########### 
 
-rowView : Radix -> Cells -> Html Msg
-rowView r columns =
+rowView : String -> Radix -> Cells -> Html Msg
+rowView sheetName r columns =
   let i' = formatRowIndex r columns in
-  map columnView columns
+  map (columnView sheetName) columns
   |>(::) (rowIndexView i')
   |>div [ class "row" ]
 
@@ -84,8 +114,8 @@ rowIndexView indexString =
 -- ####### Column
 -- ##############
 
-columnView : Cell -> Html Msg
-columnView {ri, ci, content} =
+columnView : String -> Cell -> Html Msg
+columnView sheetName {ri, ci, content} =
   let
     subclass = 
       if content == "" then ""

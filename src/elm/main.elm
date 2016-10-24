@@ -5,6 +5,9 @@ import Types            exposing (..)
 import Ports            exposing (..)
 import View             exposing (view)
 import Init             exposing (initialModel)
+import Tracker
+import Dict             exposing (get)
+import Maybe            exposing (withDefault)
 import Debug exposing (log)
 
 main =
@@ -20,13 +23,25 @@ subscriptions model =
   Sub.none
 
 update : Msg -> Model -> (Model, Cmd Msg)
-update message m =
+update message model =
   case message of
-    UpdateCell ri ci str ->
-      --let
-      --  wow = log "WOW" (ri, ci, str)
-      --in
-      (m, Cmd.none)
+    TrackerMsg name tMsg ->
+      let 
+        tracker' = 
+          get name model.trackerModels
+          |>withDefault dummyTracker
+          |>Tracker.update tMsg
+
+      in
+      (model, Cmd.none)
+
+dummyTracker : Tracker.Model
+dummyTracker =
+  { radix = 16
+  , data  = [ [ "ERROR" ] ]
+  , sheetName = "NOPE"
+  }
+
 
 
 

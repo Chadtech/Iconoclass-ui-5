@@ -4,7 +4,6 @@ import Dict exposing (fromList, Dict, get)
 import String exposing (uncons)
 import Maybe exposing (withDefault, Maybe)
 
-
 numberToHexString : Dict Int String
 numberToHexString =
   fromList

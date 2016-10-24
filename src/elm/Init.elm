@@ -1,16 +1,10 @@
 module Init exposing (initialModel)
 
 import Types exposing (..)
+import Aliases exposing (..)
+import Tracker
 import List exposing (repeat)
 import Dict exposing (Dict, fromList)
-
-initialTracker : Tracker
-initialTracker =
-  { data =
-      repeat 9 ""
-      |>repeat 256
-  , radix = 16
-  }
 
 blankSheet : Sheet
 blankSheet =
@@ -20,6 +14,12 @@ initialModel : Model
 initialModel =
   { sheets = 
       fromList
-      ("blank-sheet", blankSheet)
+      [ ("blank-sheet", blankSheet) ]
+  , trackerModels =
+      fromList
+      [ ("left", Tracker.initialModel) 
+      , ("middle", Tracker.initialModel)
+      , ("right", Tracker.initialModel)
+      ]
   }
 
