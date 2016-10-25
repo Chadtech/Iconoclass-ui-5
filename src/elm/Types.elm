@@ -8,6 +8,7 @@ import TrackerTypes as Tracker
 type Msg 
   = TrackerMsg String Tracker.Msg
   | UpdateSheet Sheet
+  | SyncTrackers
   | NoOp
 
 type alias Model =

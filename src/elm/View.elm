@@ -12,6 +12,7 @@ import List    exposing (map, map2, repeat)
 import Dict    exposing (Dict, toList, get)
 import Maybe   exposing (withDefault)
 import Dummies exposing (blankSheet, dummyTracker)
+import Debug exposing (log)
 
 leftMiddleRight : List String
 leftMiddleRight =
@@ -31,19 +32,7 @@ renderTrackers model  =
 
 render : Model -> String -> Html TrackerTypes.Msg
 render {sheets, trackerModels} =
-  orderTrackers trackerModels 
-  >> setSheet sheets
-  >> Tracker.view
-
-
-setSheet : Dict String Sheet -> TrackerTypes.Model -> TrackerTypes.Model
-setSheet sheets t = 
-  { t 
-  | sheet = 
-      get t.sheet.name sheets
-      |>withDefault blankSheet
-  }
-
+  orderTrackers trackerModels >> Tracker.view
 
 linkTrackerView : String -> Html TrackerTypes.Msg -> Html Msg
 linkTrackerView name html =

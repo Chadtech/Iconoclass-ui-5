@@ -7,9 +7,11 @@ import View             exposing (view)
 import Init             exposing (initialModel)
 import TrackerTypes
 import Tracker
-import Dict             exposing (get, insert)
+import Dict             exposing (Dict, map, get, insert)
+import Aliases          exposing (..)
 import Maybe            exposing (withDefault)
-import Dummies          exposing (dummyTracker, blankSheet)
+import Dummies          exposing (dummyTracker, errorSheet)
+import Debug exposing (log)
 
 main =
   App.program
@@ -39,14 +41,29 @@ update message model =
 
     UpdateSheet sheet ->
       let {name} = sheet in
-      packModel
       { model 
       | sheets =
           insert name sheet model.sheets
       }
+      |>update SyncTrackers
+
+    SyncTrackers ->
+      packModel
+      { model 
+      | trackerModels =
+          model.trackerModels
+          |>map (syncTracker model.sheets)
+      }
 
     NoOp -> packModel model
         
+syncTracker : Dict String Sheet -> String -> TrackerTypes.Model -> TrackerTypes.Model
+syncTracker sheets _ tracker =
+  { tracker 
+  | sheet = 
+      get tracker.sheet.name sheets
+      |>withDefault errorSheet
+  }
 
 updateTracker : String -> TrackerTypes.Msg -> Model -> (TrackerTypes.Model, Msg)
 updateTracker name tMsg {trackerModels} =

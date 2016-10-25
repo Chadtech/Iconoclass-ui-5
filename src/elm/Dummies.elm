@@ -14,10 +14,18 @@ blankSheet =
   , name = "blank-sheet"
   }
 
+errorSheet : Sheet
+errorSheet =
+  { data = repeat 64 (repeat 4 "error")
+  , width = 4
+  , height = 64
+  , name = "blank-sheet"
+  }
+
 dummyTracker : Model
 dummyTracker =
   { radix = 16
-  , sheet = blankSheet
+  , sheet = errorSheet
   }
 
 dummyRow : Int -> Array String

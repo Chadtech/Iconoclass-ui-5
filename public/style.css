@@ -79,7 +79,7 @@ body {
   color: #b0a69a;
   font-smooth: none;
   -webkit-font-smoothing: none;
-  padding-left: 2px;
+  padding: 3px;
 }
 .cell.highlight {
   color: #000;

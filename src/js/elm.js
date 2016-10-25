@@ -7933,6 +7933,16 @@ var _user$project$Dummies$dummyCell = _elm_lang$core$Maybe$withDefault(
 var _user$project$Dummies$dummyRow = function (i) {
 	return A2(_elm_lang$core$Array$repeat, i, 'ERROR');
 };
+var _user$project$Dummies$errorSheet = {
+	data: A2(
+		_elm_lang$core$List$repeat,
+		64,
+		A2(_elm_lang$core$List$repeat, 4, 'error')),
+	width: 4,
+	height: 64,
+	name: 'blank-sheet'
+};
+var _user$project$Dummies$dummyTracker = {radix: 16, sheet: _user$project$Dummies$errorSheet};
 var _user$project$Dummies$blankSheet = {
 	data: A2(
 		_elm_lang$core$List$repeat,
@@ -7942,13 +7952,13 @@ var _user$project$Dummies$blankSheet = {
 	height: 256,
 	name: 'blank-sheet'
 };
-var _user$project$Dummies$dummyTracker = {radix: 16, sheet: _user$project$Dummies$blankSheet};
 
 var _user$project$Types$Model = F2(
 	function (a, b) {
 		return {sheets: a, trackerModels: b};
 	});
 var _user$project$Types$NoOp = {ctor: 'NoOp'};
+var _user$project$Types$SyncTrackers = {ctor: 'SyncTrackers'};
 var _user$project$Types$UpdateSheet = function (a) {
 	return {ctor: 'UpdateSheet', _0: a};
 };
@@ -8246,25 +8256,11 @@ var _user$project$View$linkTrackerView = F2(
 			_user$project$Types$TrackerMsg(name),
 			html);
 	});
-var _user$project$View$setSheet = F2(
-	function (sheets, t) {
-		return _elm_lang$core$Native_Utils.update(
-			t,
-			{
-				sheet: A2(
-					_elm_lang$core$Maybe$withDefault,
-					_user$project$Dummies$blankSheet,
-					A2(_elm_lang$core$Dict$get, t.sheet.name, sheets))
-			});
-	});
 var _user$project$View$render = function (_p0) {
 	var _p1 = _p0;
 	return function (_p2) {
 		return _user$project$Tracker$view(
-			A2(
-				_user$project$View$setSheet,
-				_p1.sheets,
-				A2(_user$project$View$orderTrackers, _p1.trackerModels, _p2)));
+			A2(_user$project$View$orderTrackers, _p1.trackerModels, _p2));
 	};
 };
 var _user$project$View$leftMiddleRight = _elm_lang$core$Native_List.fromArray(
@@ -8303,35 +8299,59 @@ var _user$project$Main$updateTracker = F3(
 				_user$project$Dummies$dummyTracker,
 				A2(_elm_lang$core$Dict$get, name, _p1.trackerModels)));
 	});
+var _user$project$Main$syncTracker = F3(
+	function (sheets, _p2, tracker) {
+		return _elm_lang$core$Native_Utils.update(
+			tracker,
+			{
+				sheet: A2(
+					_elm_lang$core$Maybe$withDefault,
+					_user$project$Dummies$errorSheet,
+					A2(_elm_lang$core$Dict$get, tracker.sheet.name, sheets))
+			});
+	});
 var _user$project$Main$update = F2(
 	function (message, model) {
 		update:
 		while (true) {
-			var _p2 = message;
-			switch (_p2.ctor) {
+			var _p3 = message;
+			switch (_p3.ctor) {
 				case 'TrackerMsg':
-					var _p4 = _p2._0;
-					var _p3 = A3(_user$project$Main$updateTracker, _p4, _p2._1, model);
-					var tracker$ = _p3._0;
-					var message$ = _p3._1;
+					var _p5 = _p3._0;
+					var _p4 = A3(_user$project$Main$updateTracker, _p5, _p3._1, model);
+					var tracker$ = _p4._0;
+					var message$ = _p4._1;
 					var _v2 = message$,
 						_v3 = _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							trackerModels: A3(_elm_lang$core$Dict$insert, _p4, tracker$, model.trackerModels)
+							trackerModels: A3(_elm_lang$core$Dict$insert, _p5, tracker$, model.trackerModels)
 						});
 					message = _v2;
 					model = _v3;
 					continue update;
 				case 'UpdateSheet':
-					var _p6 = _p2._0;
-					var _p5 = _p6;
-					var name = _p5.name;
+					var _p7 = _p3._0;
+					var _p6 = _p7;
+					var name = _p6.name;
+					var _v4 = _user$project$Types$SyncTrackers,
+						_v5 = _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							sheets: A3(_elm_lang$core$Dict$insert, name, _p7, model.sheets)
+						});
+					message = _v4;
+					model = _v5;
+					continue update;
+				case 'SyncTrackers':
 					return _user$project$Main$packModel(
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
-								sheets: A3(_elm_lang$core$Dict$insert, name, _p6, model.sheets)
+								trackerModels: A2(
+									_elm_lang$core$Dict$map,
+									_user$project$Main$syncTracker(model.sheets),
+									model.trackerModels)
 							}));
 				default:
 					return _user$project$Main$packModel(model);
