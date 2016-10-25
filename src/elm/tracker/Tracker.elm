@@ -18,20 +18,16 @@ update : Msg -> Model -> (Model, Types.Msg)
 update message model =
   case message of
     UpdateCell ri ci newContent ->
-      let 
-        {sheet} = model 
-
-        sheet' =
-          let {data, width} = sheet in
-          { sheet
-          | data =
-              data
-              |>toArrayDeep
-              |>setElement width ri ci newContent
-              |>toListDeep
-          }
-      in
-      (model, Types.UpdateSheet sheet')
+      let {sheet} = model in
+      { sheet
+      | data =
+          sheet.data
+          |>toArrayDeep
+          |>setElement sheet.width ri ci newContent
+          |>toListDeep
+      }
+      |>Types.UpdateSheet
+      |>(,) model
 
     UpdateRadix newRadix ->
       ({ model | radix = newRadix }, Types.NoOp)
