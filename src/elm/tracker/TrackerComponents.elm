@@ -7,9 +7,10 @@ import Aliases          exposing (..)
 import TrackerTypes     exposing (..)
 import Maybe            exposing (withDefault, Maybe)
 import Util             exposing (numberToHexString, trimZeros)
-import Dict             exposing (fromList, Dict, get)
-import List             exposing (map, map2, repeat, length, append, head, tail)
-
+import Dict             exposing (Dict, get)
+import List             exposing (map, length, head)
+import Array            exposing (fromList)
+import Dummies          exposing (dummyCell)
 
 
 
@@ -34,14 +35,7 @@ formatRowIndex r row =
 
 getRowIndex : Cells -> Index
 getRowIndex =
-  --Array.get
-
   head >> dummyCell >> .ri
-
-dummyCell : Maybe Cell -> Cell
-dummyCell =
-  withDefault
-  { ri = 99, ci = 99, content = "DUMMY CELL" }
 
 radixToString : Index -> String
 radixToString ri =

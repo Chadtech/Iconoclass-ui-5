@@ -7,7 +7,8 @@ import TrackerTypes as Tracker
 
 type Msg 
   = TrackerMsg String Tracker.Msg
-
+  | UpdateSheet Sheet
+  | NoOp
 
 type alias Model =
   { sheets : Dict String Sheet 

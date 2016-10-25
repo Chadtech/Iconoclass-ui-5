@@ -5,16 +5,13 @@ import Aliases exposing (..)
 import TrackerTypes as Tracker
 import List exposing (repeat)
 import Dict exposing (Dict, fromList)
-
-blankSheet : Sheet
-blankSheet =
-  repeat 256 (repeat 9 "")
+import Dummies exposing (blankSheet)
 
 initialModel : Model
 initialModel =
   { sheets = 
       fromList
-      [ ("blank-sheet", blankSheet) ]
+      [ (blankSheet.name, blankSheet) ]
   , trackerModels =
       fromList
       [ ("left", Tracker.initialModel) 

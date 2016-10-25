@@ -2,7 +2,12 @@ module Aliases exposing (..)
 
 import Array exposing (Array)
 
-type alias Sheet = List Row
+type alias Sheet = 
+  { data   : List Row
+  , width  : Int
+  , height : Int
+  , name   : String
+  }
 
 type alias Index = Int
 type alias Row   = List String

@@ -7,9 +7,9 @@ import View             exposing (view)
 import Init             exposing (initialModel)
 import TrackerTypes
 import Tracker
-import Dict             exposing (get)
+import Dict             exposing (get, insert)
 import Maybe            exposing (withDefault)
-import Debug exposing (log)
+import Dummies          exposing (dummyTracker, blankSheet)
 
 main =
   App.program
@@ -28,22 +28,36 @@ update message model =
   case message of
     TrackerMsg name tMsg ->
       let 
-        tracker' = 
-          get name model.trackerModels
-          |>withDefault dummyTracker
-          |>Tracker.update tMsg
-
+        (tracker', message') = 
+          updateTracker name tMsg model
       in
-      (model, Cmd.none)
+      { model
+      | trackerModels =
+          insert name tracker' model.trackerModels
+      }
+      |>update message'
 
-dummyTracker : TrackerTypes.Model
-dummyTracker =
-  { radix = 16
-  , data  = [ [ "ERROR" ] ]
-  , sheetName = "NOPE"
-  }
+    UpdateSheet sheet ->
+      let {name} = sheet in
+      packModel
+      { model 
+      | sheets =
+          insert name sheet model.sheets
+      }
+
+    NoOp -> packModel model
+        
+
+updateTracker : String -> TrackerTypes.Msg -> Model -> (TrackerTypes.Model, Msg)
+updateTracker name tMsg {trackerModels} =
+  get name trackerModels
+  |>withDefault dummyTracker
+  |>Tracker.update tMsg
 
 
+packModel : Model -> (Model, Cmd Msg) 
+packModel m =
+  (m, Cmd.none)
 
 
 

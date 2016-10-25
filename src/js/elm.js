@@ -7897,22 +7897,28 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
+var _user$project$Aliases$Sheet = F4(
+	function (a, b, c, d) {
+		return {data: a, width: b, height: c, name: d};
+	});
 var _user$project$Aliases$Cell = F3(
 	function (a, b, c) {
 		return {ri: a, ci: b, content: c};
 	});
 
-var _user$project$TrackerTypes$initialModel = {
+var _user$project$TrackerTypes$blankSheet = {
 	data: A2(
 		_elm_lang$core$List$repeat,
 		256,
 		A2(_elm_lang$core$List$repeat, 9, '')),
-	radix: 16,
-	sheetName: 'none'
+	width: 9,
+	height: 256,
+	name: 'blank-sheet'
 };
-var _user$project$TrackerTypes$Model = F3(
-	function (a, b, c) {
-		return {radix: a, data: b, sheetName: c};
+var _user$project$TrackerTypes$initialModel = {radix: 16, sheet: _user$project$TrackerTypes$blankSheet};
+var _user$project$TrackerTypes$Model = F2(
+	function (a, b) {
+		return {radix: a, sheet: b};
 	});
 var _user$project$TrackerTypes$UpdateCell = F3(
 	function (a, b, c) {
@@ -7922,24 +7928,40 @@ var _user$project$TrackerTypes$UpdateRadix = function (a) {
 	return {ctor: 'UpdateRadix', _0: a};
 };
 
+var _user$project$Dummies$dummyCell = _elm_lang$core$Maybe$withDefault(
+	{ri: 99, ci: 99, content: 'DUMMY CELL'});
+var _user$project$Dummies$dummyRow = function (i) {
+	return A2(_elm_lang$core$Array$repeat, i, 'ERROR');
+};
+var _user$project$Dummies$blankSheet = {
+	data: A2(
+		_elm_lang$core$List$repeat,
+		256,
+		A2(_elm_lang$core$List$repeat, 9, '')),
+	width: 9,
+	height: 256,
+	name: 'blank-sheet'
+};
+var _user$project$Dummies$dummyTracker = {radix: 16, sheet: _user$project$Dummies$blankSheet};
+
 var _user$project$Types$Model = F2(
 	function (a, b) {
 		return {sheets: a, trackerModels: b};
 	});
+var _user$project$Types$NoOp = {ctor: 'NoOp'};
+var _user$project$Types$UpdateSheet = function (a) {
+	return {ctor: 'UpdateSheet', _0: a};
+};
 var _user$project$Types$TrackerMsg = F2(
 	function (a, b) {
 		return {ctor: 'TrackerMsg', _0: a, _1: b};
 	});
 
-var _user$project$Init$blankSheet = A2(
-	_elm_lang$core$List$repeat,
-	256,
-	A2(_elm_lang$core$List$repeat, 9, ''));
 var _user$project$Init$initialModel = {
 	sheets: _elm_lang$core$Dict$fromList(
 		_elm_lang$core$Native_List.fromArray(
 			[
-				{ctor: '_Tuple2', _0: 'blank-sheet', _1: _user$project$Init$blankSheet}
+				{ctor: '_Tuple2', _0: _user$project$Dummies$blankSheet.name, _1: _user$project$Dummies$blankSheet}
 			])),
 	trackerModels: _elm_lang$core$Dict$fromList(
 		_elm_lang$core$Native_List.fromArray(
@@ -8069,13 +8091,11 @@ var _user$project$TrackerComponents$radixToString = function (ri) {
 		'z',
 		A2(_elm_lang$core$Dict$get, ri, _user$project$Util$numberToHexString));
 };
-var _user$project$TrackerComponents$dummyCell = _elm_lang$core$Maybe$withDefault(
-	{ri: 99, ci: 99, content: 'DUMMY CELL'});
 var _user$project$TrackerComponents$getRowIndex = function (_p3) {
 	return function (_) {
 		return _.ri;
 	}(
-		_user$project$TrackerComponents$dummyCell(
+		_user$project$Dummies$dummyCell(
 			_elm_lang$core$List$head(_p3)));
 };
 var _user$project$TrackerComponents$formatRowIndex = F2(
@@ -8116,25 +8136,29 @@ var _user$project$Tracker$columnToCell = F3(
 	function (ri, content, ci) {
 		return A3(_user$project$Aliases$Cell, ri, ci, content);
 	});
-var _user$project$Tracker$rowToCells = F2(
-	function (r, i) {
+var _user$project$Tracker$rowToCells = F3(
+	function (width, r, i) {
 		return A3(
 			_elm_lang$core$List$map2,
 			_user$project$Tracker$columnToCell(i),
 			r,
-			_elm_lang$core$Native_List.range(0, 8));
+			_elm_lang$core$Native_List.range(0, width - 1));
 	});
-var _user$project$Tracker$toCells = function (t) {
-	return A3(
-		_elm_lang$core$List$map2,
-		_user$project$Tracker$rowToCells,
-		t,
-		_elm_lang$core$Native_List.range(
-			0,
-			_elm_lang$core$List$length(t)));
-};
+var _user$project$Tracker$toCells = F3(
+	function (t, w, h) {
+		return A3(
+			_elm_lang$core$List$map2,
+			_user$project$Tracker$rowToCells(w),
+			t,
+			_elm_lang$core$Native_List.range(0, h));
+	});
 var _user$project$Tracker$view = function (_p0) {
 	var _p1 = _p0;
+	var _p2 = _p1.sheet;
+	var name = _p2.name;
+	var data = _p2.data;
+	var width = _p2.width;
+	var height = _p2.height;
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -8143,19 +8167,78 @@ var _user$project$Tracker$view = function (_p0) {
 			]),
 		A2(
 			_elm_lang$core$List$map,
-			A2(_user$project$TrackerComponents$rowView, _p1.sheetName, _p1.radix),
-			_user$project$Tracker$toCells(_p1.data)));
+			A2(_user$project$TrackerComponents$rowView, name, _p1.radix),
+			A3(_user$project$Tracker$toCells, data, width, height)));
 };
+var _user$project$Tracker$toListDeep = function (_p3) {
+	return _elm_lang$core$Array$toList(
+		A2(_elm_lang$core$Array$map, _elm_lang$core$Array$toList, _p3));
+};
+var _user$project$Tracker$toArrayDeep = function (_p4) {
+	return _elm_lang$core$Array$fromList(
+		A2(_elm_lang$core$List$map, _elm_lang$core$Array$fromList, _p4));
+};
+var _user$project$Tracker$setElement = F5(
+	function (width, ri, ci, str, sheet) {
+		var setter = A2(
+			_elm_lang$core$Array$set,
+			ri,
+			A3(
+				_elm_lang$core$Array$set,
+				ci,
+				str,
+				A2(
+					_elm_lang$core$Maybe$withDefault,
+					_user$project$Dummies$dummyRow(width),
+					A2(_elm_lang$core$Array$get, ri, sheet))));
+		return setter(sheet);
+	});
 var _user$project$Tracker$update = F2(
 	function (message, model) {
-		var _p2 = message;
-		if (_p2.ctor === 'UpdateCell') {
-			return model;
+		var _p5 = message;
+		if (_p5.ctor === 'UpdateCell') {
+			var _p6 = model;
+			var sheet = _p6.sheet;
+			var sheet$ = function () {
+				var _p7 = sheet;
+				var data = _p7.data;
+				var width = _p7.width;
+				return _elm_lang$core$Native_Utils.update(
+					sheet,
+					{
+						data: _user$project$Tracker$toListDeep(
+							A5(
+								_user$project$Tracker$setElement,
+								width,
+								_p5._0,
+								_p5._1,
+								_p5._2,
+								_user$project$Tracker$toArrayDeep(data)))
+					});
+			}();
+			return {
+				ctor: '_Tuple2',
+				_0: model,
+				_1: _user$project$Types$UpdateSheet(sheet$)
+			};
 		} else {
-			return model;
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{radix: _p5._0}),
+				_1: _user$project$Types$NoOp
+			};
 		}
 	});
 
+var _user$project$View$orderTrackers = F2(
+	function (models, name) {
+		return A2(
+			_elm_lang$core$Maybe$withDefault,
+			_user$project$Dummies$dummyTracker,
+			A2(_elm_lang$core$Dict$get, name, models));
+	});
 var _user$project$View$linkTrackerView = F2(
 	function (name, html) {
 		return A2(
@@ -8163,68 +8246,97 @@ var _user$project$View$linkTrackerView = F2(
 			_user$project$Types$TrackerMsg(name),
 			html);
 	});
-var _user$project$View$dummyTracker = {
-	radix: 16,
-	data: _elm_lang$core$Native_List.fromArray(
-		[
-			_elm_lang$core$Native_List.fromArray(
-			['ERROR'])
-		]),
-	sheetName: 'NOPE'
-};
-var _user$project$View$getTrackerModel = F2(
-	function (models, name) {
-		return A2(
-			_elm_lang$core$Maybe$withDefault,
-			_user$project$View$dummyTracker,
-			A2(_elm_lang$core$Dict$get, name, models));
+var _user$project$View$setSheet = F2(
+	function (sheets, t) {
+		return _elm_lang$core$Native_Utils.update(
+			t,
+			{
+				sheet: A2(
+					_elm_lang$core$Maybe$withDefault,
+					_user$project$Dummies$blankSheet,
+					A2(_elm_lang$core$Dict$get, t.sheet.name, sheets))
+			});
 	});
+var _user$project$View$render = function (_p0) {
+	var _p1 = _p0;
+	return function (_p2) {
+		return _user$project$Tracker$view(
+			A2(
+				_user$project$View$setSheet,
+				_p1.sheets,
+				A2(_user$project$View$orderTrackers, _p1.trackerModels, _p2)));
+	};
+};
 var _user$project$View$leftMiddleRight = _elm_lang$core$Native_List.fromArray(
 	['left', 'middle', 'right']);
-var _user$project$View$getTrackers = function (trackerModels) {
+var _user$project$View$renderTrackers = function (model) {
 	return A3(
 		_elm_lang$core$List$map2,
 		_user$project$View$linkTrackerView,
 		_user$project$View$leftMiddleRight,
 		A2(
 			_elm_lang$core$List$map,
-			_user$project$Tracker$view,
-			A2(
-				_elm_lang$core$List$map,
-				_user$project$View$getTrackerModel(trackerModels),
-				_user$project$View$leftMiddleRight)));
+			_user$project$View$render(model),
+			_user$project$View$leftMiddleRight));
 };
-var _user$project$View$view = function (_p0) {
-	var _p1 = _p0;
+var _user$project$View$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
 			[
 				_elm_lang$html$Html_Attributes$class('main')
 			]),
-		_user$project$View$getTrackers(_p1.trackerModels));
+		_user$project$View$renderTrackers(model));
 };
 
-var _user$project$Main$dummyTracker = {
-	radix: 16,
-	data: _elm_lang$core$Native_List.fromArray(
-		[
-			_elm_lang$core$Native_List.fromArray(
-			['ERROR'])
-		]),
-	sheetName: 'NOPE'
+var _user$project$Main$packModel = function (m) {
+	return {ctor: '_Tuple2', _0: m, _1: _elm_lang$core$Platform_Cmd$none};
 };
-var _user$project$Main$update = F2(
-	function (message, model) {
-		var _p0 = message;
-		var tracker$ = A2(
+var _user$project$Main$updateTracker = F3(
+	function (name, tMsg, _p0) {
+		var _p1 = _p0;
+		return A2(
 			_user$project$Tracker$update,
-			_p0._1,
+			tMsg,
 			A2(
 				_elm_lang$core$Maybe$withDefault,
-				_user$project$Main$dummyTracker,
-				A2(_elm_lang$core$Dict$get, _p0._0, model.trackerModels)));
-		return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				_user$project$Dummies$dummyTracker,
+				A2(_elm_lang$core$Dict$get, name, _p1.trackerModels)));
+	});
+var _user$project$Main$update = F2(
+	function (message, model) {
+		update:
+		while (true) {
+			var _p2 = message;
+			switch (_p2.ctor) {
+				case 'TrackerMsg':
+					var _p4 = _p2._0;
+					var _p3 = A3(_user$project$Main$updateTracker, _p4, _p2._1, model);
+					var tracker$ = _p3._0;
+					var message$ = _p3._1;
+					var _v2 = message$,
+						_v3 = _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							trackerModels: A3(_elm_lang$core$Dict$insert, _p4, tracker$, model.trackerModels)
+						});
+					message = _v2;
+					model = _v3;
+					continue update;
+				case 'UpdateSheet':
+					var _p6 = _p2._0;
+					var _p5 = _p6;
+					var name = _p5.name;
+					return _user$project$Main$packModel(
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								sheets: A3(_elm_lang$core$Dict$insert, name, _p6, model.sheets)
+							}));
+				default:
+					return _user$project$Main$packModel(model);
+			}
+		}
 	});
 var _user$project$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
@@ -8242,6 +8354,8 @@ var _user$project$Main$main = {
 var Elm = {};
 Elm['Aliases'] = Elm['Aliases'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Aliases'], 'Aliases', typeof _user$project$Aliases$main === 'undefined' ? null : _user$project$Aliases$main);
+Elm['Dummies'] = Elm['Dummies'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['Dummies'], 'Dummies', typeof _user$project$Dummies$main === 'undefined' ? null : _user$project$Dummies$main);
 Elm['Init'] = Elm['Init'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Init'], 'Init', typeof _user$project$Init$main === 'undefined' ? null : _user$project$Init$main);
 Elm['Main'] = Elm['Main'] || {};
