@@ -40,14 +40,19 @@ body {
   border: 1px #807872 solid;
   background: #2a2c27;
 }
+.column.wide {
+  width: 84px;
+}
 .point {
   margin: 0;
   position: relative;
-  font-family: HFNSS;
+  font-family: HFTIN;
   color: #b0a69a;
   -webkit-font-smoothing: none;
-  font-size: 2em;
+  font-size: 1em;
   font-smooth: none;
+  margin-top: 2px;
+  text-align: center;
 }
 .tracker {
   position: relative;
@@ -68,6 +73,21 @@ body {
   font-smooth: none;
   -webkit-font-smoothing: none;
   text-align: center;
+}
+.field {
+  background: none;
+  width: 40px;
+  border: none;
+  outline: none;
+  font-family: HFTIN;
+  font-size: 1em;
+  color: #b0a69a;
+  font-smooth: none;
+  -webkit-font-smoothing: none;
+  padding: 3px;
+}
+.field.wide {
+  width: 84px;
 }
 .cell {
   background: none;

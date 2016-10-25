@@ -13,6 +13,40 @@ import Array            exposing (fromList)
 import Dummies          exposing (dummyCell)
 
 
+-- ###### Tracker Header
+-- #####################
+
+trackerHeader : Model -> Html Msg
+trackerHeader tracker =
+  div
+  [ class "row" ]
+  [ div
+    [ class "column" ]
+    [ p
+      [ class "point" ]
+      [ text "radix"]
+    ]
+  , div
+    [ class "column" ]
+    [ input
+      [ class "field"
+      , value tracker.radixField
+      , onInput UpdateRadix
+      ]
+      []
+    ]
+  , div
+    [ class "column wide" ]
+    [ input
+      [ class "field wide"
+      , value tracker.sheet.name
+      , onInput UpdateSheetName
+      ]
+      []
+
+    ]
+  ]
+
 
 -- ####### Row
 -- ########### 

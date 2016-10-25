@@ -12,6 +12,9 @@ import Array             exposing (fromList, toList, Array, set, get)
 import Maybe             exposing (withDefault, Maybe)
 import Types
 import Dummies           exposing (dummyRow)
+import ParseInt          exposing (..)
+
+import Debug 
 
 
 update : Msg -> Model -> (Model, Types.Msg)
@@ -29,8 +32,30 @@ update message model =
       |>Types.UpdateSheet
       |>(,) model
 
-    UpdateRadix newRadix ->
-      ({ model | radix = newRadix }, Types.NoOp)
+    UpdateRadix radixField ->
+      let
+        newRadix =
+          if radixField == "" then model.radix
+          else
+            case (parseInt radixField) of
+              Ok result -> result
+              Err _ -> 2
+      in
+      packModel
+      { model 
+      | radixField = radixField
+      , radix      = newRadix
+      }
+
+    UpdateSheetName newName ->
+      let {sheet} = model in
+      { sheet | name = newName }
+      |>Types.UpdateSheetName sheet.name
+      |>(,) model
+
+
+packModel : Model -> (Model, Types.Msg)
+packModel model = (model, Types.NoOp)
 
 
 --      LIST MODIFICATION
@@ -57,18 +82,19 @@ toListDeep = Array.map toList >> toList
 --         VIEW
 
 view : Model -> Html Msg
-view {sheet, radix} =
-  let {name, data, width, height} = sheet in
-  toCells data width height
-  |>map (rowView name radix)
+view model =
+  let {name} = model.sheet in
+  toCells model.sheet
+  |>map (rowView name model.radix)
+  |>(::) (trackerHeader model)
   |>div [ class "tracker" ]
 
 
 -- Tracker data formatting
 
-toCells : List Row -> Int -> Int -> List Cells
-toCells t w h =
-  map2 (rowToCells w) t [ 0 .. h ]
+toCells : Sheet -> List Cells
+toCells {data, width, height} =
+  map2 (rowToCells width) data [ 0 .. height ]
 
 rowToCells : Int -> Row -> Int -> Cells
 rowToCells width r i =
