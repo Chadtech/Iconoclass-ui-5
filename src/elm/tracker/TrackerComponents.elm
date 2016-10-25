@@ -42,8 +42,7 @@ trackerHeader tracker =
       ]
       []
     ]
-  , div 
-    [ class "column clean"]
+  , columnClean
     [ input
       [ class "button"
       , type' "submit"
@@ -51,8 +50,7 @@ trackerHeader tracker =
       ]
       []
     ]
-  , div 
-    [ class "column clean"]
+  , columnClean
     [ input
       [ class "button"
       , type' "submit"
@@ -60,8 +58,7 @@ trackerHeader tracker =
       ]
       []
     ]
-  , div 
-    [ class "column clean"]
+  , columnClean
     [ input
       [ class "button"
       , type' "submit"
@@ -69,8 +66,7 @@ trackerHeader tracker =
       ]
       []
     ]
-  , div 
-    [ class "column clean"]
+  , columnClean
     [ input
       [ class "button"
       , type' "submit"
@@ -79,8 +75,12 @@ trackerHeader tracker =
       []
     ]
   ]
+
 column : List (Html Msg) -> Html Msg
 column = div [ class "column" ]
+
+columnClean : List (Html Msg) -> Html Msg
+columnClean = div [ class "column clean" ]
 
 columnNumbers : Sheet -> Html Msg
 columnNumbers {width} =

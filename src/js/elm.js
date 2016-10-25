@@ -8201,6 +8201,11 @@ var _user$project$TrackerComponents$columnNumbers = function (_p5) {
 				_user$project$TrackerComponents$columnIndexView,
 				_elm_lang$core$Native_List.range(0, _p6.width - 1))));
 };
+var _user$project$TrackerComponents$columnClean = _elm_lang$html$Html$div(
+	_elm_lang$core$Native_List.fromArray(
+		[
+			_elm_lang$html$Html_Attributes$class('column clean')
+		]));
 var _user$project$TrackerComponents$column = _elm_lang$html$Html$div(
 	_elm_lang$core$Native_List.fromArray(
 		[
@@ -8262,12 +8267,7 @@ var _user$project$TrackerComponents$trackerHeader = function (tracker) {
 						_elm_lang$core$Native_List.fromArray(
 							[]))
 					])),
-				A2(
-				_elm_lang$html$Html$div,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('column clean')
-					]),
+				_user$project$TrackerComponents$columnClean(
 				_elm_lang$core$Native_List.fromArray(
 					[
 						A2(
@@ -8281,12 +8281,7 @@ var _user$project$TrackerComponents$trackerHeader = function (tracker) {
 						_elm_lang$core$Native_List.fromArray(
 							[]))
 					])),
-				A2(
-				_elm_lang$html$Html$div,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('column clean')
-					]),
+				_user$project$TrackerComponents$columnClean(
 				_elm_lang$core$Native_List.fromArray(
 					[
 						A2(
@@ -8300,12 +8295,7 @@ var _user$project$TrackerComponents$trackerHeader = function (tracker) {
 						_elm_lang$core$Native_List.fromArray(
 							[]))
 					])),
-				A2(
-				_elm_lang$html$Html$div,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('column clean')
-					]),
+				_user$project$TrackerComponents$columnClean(
 				_elm_lang$core$Native_List.fromArray(
 					[
 						A2(
@@ -8319,12 +8309,7 @@ var _user$project$TrackerComponents$trackerHeader = function (tracker) {
 						_elm_lang$core$Native_List.fromArray(
 							[]))
 					])),
-				A2(
-				_elm_lang$html$Html$div,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('column clean')
-					]),
+				_user$project$TrackerComponents$columnClean(
 				_elm_lang$core$Native_List.fromArray(
 					[
 						A2(
