@@ -23,7 +23,7 @@ trackerHeader tracker =
   [ div
     [ class "column" ]
     [ p
-      [ class "point" ]
+      [ class "point ignorable" ]
       [ text "radix"]
     ]
   , div
@@ -43,9 +43,14 @@ trackerHeader tracker =
       , onInput UpdateSheetName
       ]
       []
-
     ]
   ]
+
+columnNumbers : Sheet -> Html Msg
+columnNumbers {width} =
+  map columnIndexView [ 0 .. (width - 1) ]
+  |>(::) (div [ class "column index" ] [])
+  |>div [ class "row" ]
 
 
 -- ####### Row
@@ -54,7 +59,7 @@ trackerHeader tracker =
 rowView : String -> Radix -> Cells -> Html Msg
 rowView sheetName r columns =
   let i' = formatRowIndex r columns in
-  map (columnView sheetName) columns
+  map (columnView r sheetName) columns
   |>(::) (rowIndexView i')
   |>div [ class "row" ]
 
@@ -87,17 +92,33 @@ rowIndexView indexString =
     [ text indexString ]
   ]
 
+columnIndexView : Int -> Html Msg
+columnIndexView i =
+  div
+  [ class "column index" ]
+  [ p 
+    [ class "index-cell" ]
+    [ text (toString i) ] 
+  ]
+
 
 
 -- ####### Column
 -- ##############
 
-columnView : String -> Cell -> Html Msg
-columnView sheetName {ri, ci, content} =
+columnView : Radix -> String -> Cell -> Html Msg
+columnView radix sheetName {ri, ci, content} =
   let
-    subclass = 
+    highlight = 
       if content == "" then ""
       else " highlight"
+
+    zeroClass =
+      if ri % radix /= 0 then ""
+      else " zero-row"
+
+    subclass = 
+      highlight ++ zeroClass
   in
   div
   [ class ("column" ++ subclass) ]

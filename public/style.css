@@ -36,12 +36,18 @@ body {
 .column.highlight {
   background: #b0a69a;
 }
+.column.zero-row {
+  background: #2a2c27;
+}
 .column.index {
   border: 1px #807872 solid;
   background: #2a2c27;
 }
 .column.wide {
   width: 84px;
+}
+.column:hover {
+  border: 1px #b0a69a solid;
 }
 .point {
   margin: 0;
@@ -53,6 +59,9 @@ body {
   font-smooth: none;
   margin-top: 2px;
   text-align: center;
+}
+.point.ignorable {
+  color: #807872;
 }
 .tracker {
   position: relative;
@@ -99,8 +108,12 @@ body {
   color: #b0a69a;
   font-smooth: none;
   -webkit-font-smoothing: none;
+  height: 13px;
   padding: 3px;
 }
 .cell.highlight {
   color: #000;
+}
+.cell:focus {
+  border: 1px #b0a69a solid;
 }

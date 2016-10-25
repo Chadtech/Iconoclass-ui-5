@@ -8053,11 +8053,16 @@ var _user$project$Util$numberToHexString = _elm_lang$core$Dict$fromList(
 			{ctor: '_Tuple2', _0: 23, _1: 'n'}
 		]));
 
-var _user$project$TrackerComponents$columnView = F2(
-	function (sheetName, _p0) {
+var _user$project$TrackerComponents$columnView = F3(
+	function (radix, sheetName, _p0) {
 		var _p1 = _p0;
+		var _p3 = _p1.ri;
 		var _p2 = _p1.content;
-		var subclass = _elm_lang$core$Native_Utils.eq(_p2, '') ? '' : ' highlight';
+		var zeroClass = (!_elm_lang$core$Native_Utils.eq(
+			A2(_elm_lang$core$Basics_ops['%'], _p3, radix),
+			0)) ? '' : ' zero-row';
+		var highlight = _elm_lang$core$Native_Utils.eq(_p2, '') ? '' : ' highlight';
+		var subclass = A2(_elm_lang$core$Basics_ops['++'], highlight, zeroClass);
 		return A2(
 			_elm_lang$html$Html$div,
 			_elm_lang$core$Native_List.fromArray(
@@ -8075,12 +8080,34 @@ var _user$project$TrackerComponents$columnView = F2(
 							A2(_elm_lang$core$Basics_ops['++'], 'cell', subclass)),
 							_elm_lang$html$Html_Attributes$value(_p2),
 							_elm_lang$html$Html_Events$onInput(
-							A2(_user$project$TrackerTypes$UpdateCell, _p1.ri, _p1.ci))
+							A2(_user$project$TrackerTypes$UpdateCell, _p3, _p1.ci))
 						]),
 					_elm_lang$core$Native_List.fromArray(
 						[]))
 				]));
 	});
+var _user$project$TrackerComponents$columnIndexView = function (i) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('column index')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$p,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('index-cell')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(
+						_elm_lang$core$Basics$toString(i))
+					]))
+			]));
+};
 var _user$project$TrackerComponents$rowIndexView = function (indexString) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -8108,12 +8135,12 @@ var _user$project$TrackerComponents$radixToString = function (ri) {
 		'z',
 		A2(_elm_lang$core$Dict$get, ri, _user$project$Util$numberToHexString));
 };
-var _user$project$TrackerComponents$getRowIndex = function (_p3) {
+var _user$project$TrackerComponents$getRowIndex = function (_p4) {
 	return function (_) {
 		return _.ri;
 	}(
 		_user$project$Dummies$dummyCell(
-			_elm_lang$core$List$head(_p3)));
+			_elm_lang$core$List$head(_p4)));
 };
 var _user$project$TrackerComponents$formatRowIndex = F2(
 	function (r, row) {
@@ -8145,9 +8172,35 @@ var _user$project$TrackerComponents$rowView = F3(
 				_user$project$TrackerComponents$rowIndexView(i$),
 				A2(
 					_elm_lang$core$List$map,
-					_user$project$TrackerComponents$columnView(sheetName),
+					A2(_user$project$TrackerComponents$columnView, r, sheetName),
 					columns)));
 	});
+var _user$project$TrackerComponents$columnNumbers = function (_p5) {
+	var _p6 = _p5;
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('row')
+			]),
+		A2(
+			F2(
+				function (x, y) {
+					return A2(_elm_lang$core$List_ops['::'], x, y);
+				}),
+			A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('column index')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+			A2(
+				_elm_lang$core$List$map,
+				_user$project$TrackerComponents$columnIndexView,
+				_elm_lang$core$Native_List.range(0, _p6.width - 1))));
+};
 var _user$project$TrackerComponents$trackerHeader = function (tracker) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -8169,7 +8222,7 @@ var _user$project$TrackerComponents$trackerHeader = function (tracker) {
 						_elm_lang$html$Html$p,
 						_elm_lang$core$Native_List.fromArray(
 							[
-								_elm_lang$html$Html_Attributes$class('point')
+								_elm_lang$html$Html_Attributes$class('point ignorable')
 							]),
 						_elm_lang$core$Native_List.fromArray(
 							[
@@ -8375,9 +8428,15 @@ var _user$project$Tracker$view = function (model) {
 				}),
 			_user$project$TrackerComponents$trackerHeader(model),
 			A2(
-				_elm_lang$core$List$map,
-				A2(_user$project$TrackerComponents$rowView, name, model.radix),
-				_user$project$Tracker$toCells(model.sheet))));
+				F2(
+					function (x, y) {
+						return A2(_elm_lang$core$List_ops['::'], x, y);
+					}),
+				_user$project$TrackerComponents$columnNumbers(model.sheet),
+				A2(
+					_elm_lang$core$List$map,
+					A2(_user$project$TrackerComponents$rowView, name, model.radix),
+					_user$project$Tracker$toCells(model.sheet)))));
 };
 var _user$project$Tracker$toListDeep = function (_p3) {
 	return _elm_lang$core$Array$toList(

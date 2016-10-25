@@ -86,6 +86,7 @@ view model =
   let {name} = model.sheet in
   toCells model.sheet
   |>map (rowView name model.radix)
+  |>(::) (columnNumbers model.sheet)
   |>(::) (trackerHeader model)
   |>div [ class "tracker" ]
 

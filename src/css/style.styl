@@ -65,11 +65,16 @@ body
   float left
   &.highlight
     background pointColor
+  &.zero-row
+    background veryVeryIgnorable
   &.index
     border 1px ignorable solid
     background veryVeryIgnorable
   &.wide
     width 84px
+  &:hover
+    border 1px pointColor solid
+
 
 .point
   margin 0
@@ -81,6 +86,8 @@ body
   font-smooth none
   margin-top 2px
   text-align center
+  &.ignorable
+    color ignorable
   
 .tracker
   position relative
@@ -126,10 +133,13 @@ body
   color pointColor
   font-smooth none
   -webkit-font-smoothing none
+  height 13px
   // padding-left 2px
   padding 3px
   &.highlight
     color actualBlack
+  &:focus
+    border 1px pointColor solid
 
 
   
