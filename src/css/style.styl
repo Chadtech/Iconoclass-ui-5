@@ -74,6 +74,9 @@ body
     width 84px
   &:hover
     border 1px pointColor solid
+  &.clean
+    border none
+    width 42px
 
 
 .point
@@ -122,6 +125,30 @@ body
   padding 3px
   &.wide
     width 84px
+  
+.button
+  background-color ignorable
+  width 42px
+  height 15px
+  border-left 1px pointColor solid
+  border-top 1px pointColor solid
+  border-right 1px veryIgnorable solid
+  border-bottom 1px veryIgnorable solid
+  outline none
+  font-family HFTIN
+  font-size 1em
+  color actualBlack
+  font-smooth none
+  -webkit-font-smoothing none 
+  margin-right
+  &:hover
+    color pointColor
+  &:active
+    border-left 1px veryIgnorable solid
+    border-top 1px veryIgnorable solid
+    border-right 1px pointColor solid
+    border-bottom 1px pointColor solid
+ 
 
 .cell
   background none
@@ -140,6 +167,7 @@ body
     color actualBlack
   &:focus
     border 1px pointColor solid
+    outline none
 
 
   

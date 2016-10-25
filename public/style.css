@@ -49,6 +49,10 @@ body {
 .column:hover {
   border: 1px #b0a69a solid;
 }
+.column.clean {
+  border: none;
+  width: 42px;
+}
 .point {
   margin: 0;
   position: relative;
@@ -98,6 +102,31 @@ body {
 .field.wide {
   width: 84px;
 }
+.button {
+  background-color: #807872;
+  width: 42px;
+  height: 15px;
+  border-left: 1px #b0a69a solid;
+  border-top: 1px #b0a69a solid;
+  border-right: 1px #54574d solid;
+  border-bottom: 1px #54574d solid;
+  outline: none;
+  font-family: HFTIN;
+  font-size: 1em;
+  color: #000;
+  font-smooth: none;
+  -webkit-font-smoothing: none;
+}
+.button margin-right,
+.button:hover {
+  color: #b0a69a;
+}
+.button:active {
+  border-left: 1px #54574d solid;
+  border-top: 1px #54574d solid;
+  border-right: 1px #b0a69a solid;
+  border-bottom: 1px #b0a69a solid;
+}
 .cell {
   background: none;
   width: 40px;
@@ -116,4 +145,5 @@ body {
 }
 .cell:focus {
   border: 1px #b0a69a solid;
+  outline: none;
 }

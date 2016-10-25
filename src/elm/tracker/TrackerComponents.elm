@@ -20,14 +20,12 @@ trackerHeader : Model -> Html Msg
 trackerHeader tracker =
   div
   [ class "row" ]
-  [ div
-    [ class "column" ]
+  [ column
     [ p
       [ class "point ignorable" ]
       [ text "radix"]
     ]
-  , div
-    [ class "column" ]
+  , column
     [ input
       [ class "field"
       , value tracker.radixField
@@ -44,7 +42,45 @@ trackerHeader tracker =
       ]
       []
     ]
+  , div 
+    [ class "column clean"]
+    [ input
+      [ class "button"
+      , type' "submit"
+      , value "new"
+      ]
+      []
+    ]
+  , div 
+    [ class "column clean"]
+    [ input
+      [ class "button"
+      , type' "submit"
+      , value "open"
+      ]
+      []
+    ]
+  , div 
+    [ class "column clean"]
+    [ input
+      [ class "button"
+      , type' "submit"
+      , value "save"
+      ]
+      []
+    ]
+  , div 
+    [ class "column clean"]
+    [ input
+      [ class "button"
+      , type' "submit"
+      , value "close"
+      ]
+      []
+    ]
   ]
+column : List (Html Msg) -> Html Msg
+column = div [ class "column" ]
 
 columnNumbers : Sheet -> Html Msg
 columnNumbers {width} =

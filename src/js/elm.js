@@ -8201,6 +8201,11 @@ var _user$project$TrackerComponents$columnNumbers = function (_p5) {
 				_user$project$TrackerComponents$columnIndexView,
 				_elm_lang$core$Native_List.range(0, _p6.width - 1))));
 };
+var _user$project$TrackerComponents$column = _elm_lang$html$Html$div(
+	_elm_lang$core$Native_List.fromArray(
+		[
+			_elm_lang$html$Html_Attributes$class('column')
+		]));
 var _user$project$TrackerComponents$trackerHeader = function (tracker) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -8210,12 +8215,7 @@ var _user$project$TrackerComponents$trackerHeader = function (tracker) {
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				A2(
-				_elm_lang$html$Html$div,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('column')
-					]),
+				_user$project$TrackerComponents$column(
 				_elm_lang$core$Native_List.fromArray(
 					[
 						A2(
@@ -8229,12 +8229,7 @@ var _user$project$TrackerComponents$trackerHeader = function (tracker) {
 								_elm_lang$html$Html$text('radix')
 							]))
 					])),
-				A2(
-				_elm_lang$html$Html$div,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('column')
-					]),
+				_user$project$TrackerComponents$column(
 				_elm_lang$core$Native_List.fromArray(
 					[
 						A2(
@@ -8263,6 +8258,82 @@ var _user$project$TrackerComponents$trackerHeader = function (tracker) {
 								_elm_lang$html$Html_Attributes$class('field wide'),
 								_elm_lang$html$Html_Attributes$value(tracker.sheet.name),
 								_elm_lang$html$Html_Events$onInput(_user$project$TrackerTypes$UpdateSheetName)
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[]))
+					])),
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('column clean')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$input,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$class('button'),
+								_elm_lang$html$Html_Attributes$type$('submit'),
+								_elm_lang$html$Html_Attributes$value('new')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[]))
+					])),
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('column clean')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$input,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$class('button'),
+								_elm_lang$html$Html_Attributes$type$('submit'),
+								_elm_lang$html$Html_Attributes$value('open')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[]))
+					])),
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('column clean')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$input,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$class('button'),
+								_elm_lang$html$Html_Attributes$type$('submit'),
+								_elm_lang$html$Html_Attributes$value('save')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[]))
+					])),
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('column clean')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$input,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$class('button'),
+								_elm_lang$html$Html_Attributes$type$('submit'),
+								_elm_lang$html$Html_Attributes$value('close')
 							]),
 						_elm_lang$core$Native_List.fromArray(
 							[]))
