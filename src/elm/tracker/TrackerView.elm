@@ -38,7 +38,7 @@ body model =
   |>div [ class "tracker" ]
 
 
--- Tracker data formatting
+--        DATA FORMATTING
 
 
 toCells : Sheet -> List Cells

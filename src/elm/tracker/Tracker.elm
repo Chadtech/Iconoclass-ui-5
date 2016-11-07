@@ -80,6 +80,9 @@ update message model =
       }
       (Types.NewSheet newName)
 
+    NoOp ->
+      packModel model
+
 
 packModel : Model -> (Model, Types.Msg)
 packModel model = (model, Types.NoOp)

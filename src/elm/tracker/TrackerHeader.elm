@@ -1,11 +1,11 @@
 module TrackerHeader exposing (..)
 
-import Html             exposing (..)
-import Html.Attributes  exposing (..)
-import Html.Events      exposing (..)
-import Aliases          exposing (..)
-import TrackerTypes     exposing (..)
-import List             exposing (map)
+import Html              exposing (..)
+import Html.Attributes   exposing (..)
+import Html.Events       exposing (..)
+import Aliases           exposing (..)
+import TrackerTypes      exposing (..)
+import List              exposing (map)
 import TrackerComponents exposing (..)
 
 
@@ -38,42 +38,27 @@ view tracker =
       ]
       []
     ]
-  , columnClean
-    [ input
-      [ class "button"
-      , type' "submit"
-      , value "new"
-      , onClick NewSheet
-      ]
-      []
+  , button "new" (onClick NewSheet)
+  , button "open" (onClick NoOp)
+  , button "save" (onClick NoOp)
+  , button "close" (onClick NoOp)
+  , dropdown tracker
+  ]
+
+
+--        BUTTON
+
+
+button : String -> Attribute Msg -> Html Msg
+button label clickAction =
+  columnClean
+  [ input 
+    [ class "button" 
+    , type' "submit"
+    , value label
+    , clickAction
     ]
-  , columnClean
-    [ input
-      [ class "button"
-      , type' "submit"
-      , value "open"
-      ]
-      []
-    ]
-  , columnClean
-    [ input
-      [ class "button"
-      , type' "submit"
-      , value "save"
-      ]
-      []
-    ]
-  , columnClean
-    [ input
-      [ class "button"
-      , type' "submit"
-      , value "close"
-      ]
-      []
-    ]
-  , div
-    [ class "column wide index" ]
-    [ dropdown tracker ]
+    []
   ]
 
 
@@ -82,25 +67,29 @@ view tracker =
 
 dropdown : Model -> Html Msg
 dropdown tracker =
-  let {droppedDown} = tracker in
-  if droppedDown then
-    down tracker
-  else
-    up tracker
+  let 
+    body = 
+      if tracker.droppedDown then
+        down tracker
+      else
+        up tracker
+  in
+  div 
+  [ class "column wide index" ] 
+  [ body ]
 
 up : Model -> Html Msg
-up tracker =
+up {sheet} =
   p 
   [ class "index-cell" 
   , onClick DropDown
   ]
-  [ text tracker.sheet.name ]
+  [ text sheet.name ]
 
 down : Model -> Html Msg
 down {otherSheets} =
-  div
-  [ class "dropped-down" ]
-  (map downOption otherSheets)
+  map downOption otherSheets
+  |>div [ class "dropped-down" ]
 
 
 downOption : String -> Html Msg

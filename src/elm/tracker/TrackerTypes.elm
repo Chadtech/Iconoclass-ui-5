@@ -35,3 +35,4 @@ type Msg
   | DropDown
   | SetSheet String
   | NewSheet
+  | NoOp

@@ -29,8 +29,8 @@ columnNumbers {width} =
   |>div [ class "row" ]
 
 
--- ####### Row
--- ########### 
+--          ROW
+
 
 rowView : String -> Radix -> Cells -> Html Msg
 rowView sheetName r columns =
@@ -39,7 +39,18 @@ rowView sheetName r columns =
   |>(::) (rowIndexView i')
   |>div [ class "row" ]
 
--- row formatting
+rowIndexView : String -> Html Msg
+rowIndexView indexString =
+  div
+  [ class "column index" ]
+  [ p
+    [ class "index-cell" ]
+    [ text indexString ]
+  ]
+
+
+--        ROW FORMATTING
+
 
 formatRowIndex : Radix -> Cells -> String
 formatRowIndex r row =
@@ -57,30 +68,9 @@ radixToString ri =
   get ri numberToHexString
   |>withDefault "z"
 
--- 
 
-rowIndexView : String -> Html Msg
-rowIndexView indexString =
-  div
-  [ class "column index" ]
-  [ p
-    [ class "index-cell" ]
-    [ text indexString ]
-  ]
+--          COLUMN
 
-columnIndexView : Int -> Html Msg
-columnIndexView i =
-  div
-  [ class "column index" ]
-  [ p 
-    [ class "index-cell" ]
-    [ text (toString i) ] 
-  ]
-
-
-
--- ####### Column
--- ##############
 
 columnView : Radix -> String -> Cell -> Html Msg
 columnView radix sheetName {ri, ci, content} =
@@ -104,4 +94,13 @@ columnView radix sheetName {ri, ci, content} =
     , onInput (UpdateCell ri ci)
     ] 
     [] 
+  ]
+
+columnIndexView : Int -> Html Msg
+columnIndexView i =
+  div
+  [ class "column index" ]
+  [ p 
+    [ class "index-cell" ]
+    [ text (toString i) ] 
   ]

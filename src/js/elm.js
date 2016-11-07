@@ -7938,6 +7938,7 @@ var _user$project$TrackerTypes$Model = F5(
 	function (a, b, c, d, e) {
 		return {radix: a, radixField: b, sheet: c, droppedDown: d, otherSheets: e};
 	});
+var _user$project$TrackerTypes$NoOp = {ctor: 'NoOp'};
 var _user$project$TrackerTypes$NewSheet = {ctor: 'NewSheet'};
 var _user$project$TrackerTypes$SetSheet = function (a) {
 	return {ctor: 'SetSheet', _0: a};
@@ -8086,6 +8087,28 @@ var _user$project$Util$numberToHexString = _elm_lang$core$Dict$fromList(
 			{ctor: '_Tuple2', _0: 23, _1: 'n'}
 		]));
 
+var _user$project$TrackerComponents$columnIndexView = function (i) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('column index')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$p,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('index-cell')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(
+						_elm_lang$core$Basics$toString(i))
+					]))
+			]));
+};
 var _user$project$TrackerComponents$columnView = F3(
 	function (radix, sheetName, _p0) {
 		var _p1 = _p0;
@@ -8119,49 +8142,6 @@ var _user$project$TrackerComponents$columnView = F3(
 						[]))
 				]));
 	});
-var _user$project$TrackerComponents$columnIndexView = function (i) {
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html_Attributes$class('column index')
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				A2(
-				_elm_lang$html$Html$p,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('index-cell')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text(
-						_elm_lang$core$Basics$toString(i))
-					]))
-			]));
-};
-var _user$project$TrackerComponents$rowIndexView = function (indexString) {
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html_Attributes$class('column index')
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				A2(
-				_elm_lang$html$Html$p,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('index-cell')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text(indexString)
-					]))
-			]));
-};
 var _user$project$TrackerComponents$radixToString = function (ri) {
 	return A2(
 		_elm_lang$core$Maybe$withDefault,
@@ -8188,6 +8168,27 @@ var _user$project$TrackerComponents$formatRowIndex = F2(
 				_user$project$TrackerComponents$radixToString(
 					A2(_elm_lang$core$Basics_ops['%'], n, r))));
 	});
+var _user$project$TrackerComponents$rowIndexView = function (indexString) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('column index')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$p,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('index-cell')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(indexString)
+					]))
+			]));
+};
 var _user$project$TrackerComponents$rowView = F3(
 	function (sheetName, r, columns) {
 		var i$ = A2(_user$project$TrackerComponents$formatRowIndex, r, columns);
@@ -8278,7 +8279,8 @@ var _user$project$TrackerHeader$down = function (_p0) {
 			]),
 		A2(_elm_lang$core$List$map, _user$project$TrackerHeader$downOption, _p1.otherSheets));
 };
-var _user$project$TrackerHeader$up = function (tracker) {
+var _user$project$TrackerHeader$up = function (_p2) {
+	var _p3 = _p2;
 	return A2(
 		_elm_lang$html$Html$p,
 		_elm_lang$core$Native_List.fromArray(
@@ -8288,14 +8290,38 @@ var _user$project$TrackerHeader$up = function (tracker) {
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$html$Html$text(tracker.sheet.name)
+				_elm_lang$html$Html$text(_p3.sheet.name)
 			]));
 };
 var _user$project$TrackerHeader$dropdown = function (tracker) {
-	var _p2 = tracker;
-	var droppedDown = _p2.droppedDown;
-	return droppedDown ? _user$project$TrackerHeader$down(tracker) : _user$project$TrackerHeader$up(tracker);
+	var body = tracker.droppedDown ? _user$project$TrackerHeader$down(tracker) : _user$project$TrackerHeader$up(tracker);
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('column wide index')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[body]));
 };
+var _user$project$TrackerHeader$button = F2(
+	function (label, clickAction) {
+		return _user$project$TrackerComponents$columnClean(
+			_elm_lang$core$Native_List.fromArray(
+				[
+					A2(
+					_elm_lang$html$Html$input,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$class('button'),
+							_elm_lang$html$Html_Attributes$type$('submit'),
+							_elm_lang$html$Html_Attributes$value(label),
+							clickAction
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[]))
+				]));
+	});
 var _user$project$TrackerHeader$view = function (tracker) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -8352,73 +8378,23 @@ var _user$project$TrackerHeader$view = function (tracker) {
 						_elm_lang$core$Native_List.fromArray(
 							[]))
 					])),
-				_user$project$TrackerComponents$columnClean(
-				_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_elm_lang$html$Html$input,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$class('button'),
-								_elm_lang$html$Html_Attributes$type$('submit'),
-								_elm_lang$html$Html_Attributes$value('new'),
-								_elm_lang$html$Html_Events$onClick(_user$project$TrackerTypes$NewSheet)
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[]))
-					])),
-				_user$project$TrackerComponents$columnClean(
-				_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_elm_lang$html$Html$input,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$class('button'),
-								_elm_lang$html$Html_Attributes$type$('submit'),
-								_elm_lang$html$Html_Attributes$value('open')
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[]))
-					])),
-				_user$project$TrackerComponents$columnClean(
-				_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_elm_lang$html$Html$input,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$class('button'),
-								_elm_lang$html$Html_Attributes$type$('submit'),
-								_elm_lang$html$Html_Attributes$value('save')
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[]))
-					])),
-				_user$project$TrackerComponents$columnClean(
-				_elm_lang$core$Native_List.fromArray(
-					[
-						A2(
-						_elm_lang$html$Html$input,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$class('button'),
-								_elm_lang$html$Html_Attributes$type$('submit'),
-								_elm_lang$html$Html_Attributes$value('close')
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[]))
-					])),
 				A2(
-				_elm_lang$html$Html$div,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('column wide index')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_user$project$TrackerHeader$dropdown(tracker)
-					]))
+				_user$project$TrackerHeader$button,
+				'new',
+				_elm_lang$html$Html_Events$onClick(_user$project$TrackerTypes$NewSheet)),
+				A2(
+				_user$project$TrackerHeader$button,
+				'open',
+				_elm_lang$html$Html_Events$onClick(_user$project$TrackerTypes$NoOp)),
+				A2(
+				_user$project$TrackerHeader$button,
+				'save',
+				_elm_lang$html$Html_Events$onClick(_user$project$TrackerTypes$NoOp)),
+				A2(
+				_user$project$TrackerHeader$button,
+				'close',
+				_elm_lang$html$Html_Events$onClick(_user$project$TrackerTypes$NoOp)),
+				_user$project$TrackerHeader$dropdown(tracker)
 			]));
 };
 
@@ -8802,7 +8778,7 @@ var _user$project$Tracker$update = F2(
 							droppedDown: false
 						}),
 					_user$project$Types$SyncTrackers);
-			default:
+			case 'NewSheet':
 				var _p10 = model;
 				var sheet = _p10.sheet;
 				var otherSheets = _p10.otherSheets;
@@ -8820,6 +8796,8 @@ var _user$project$Tracker$update = F2(
 								{name: newName})
 						}),
 					_user$project$Types$NewSheet(newName));
+			default:
+				return _user$project$Tracker$packModel(model);
 		}
 	});
 
