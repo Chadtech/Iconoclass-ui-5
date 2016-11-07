@@ -8244,7 +8244,8 @@ var _user$project$TrackerComponents$column = _elm_lang$html$Html$div(
 		[
 			_elm_lang$html$Html_Attributes$class('column')
 		]));
-var _user$project$TrackerComponents$downOption = function (str) {
+
+var _user$project$TrackerHeader$downOption = function (str) {
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -8267,17 +8268,17 @@ var _user$project$TrackerComponents$downOption = function (str) {
 					]))
 			]));
 };
-var _user$project$TrackerComponents$down = function (_p7) {
-	var _p8 = _p7;
+var _user$project$TrackerHeader$down = function (_p0) {
+	var _p1 = _p0;
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
 			[
 				_elm_lang$html$Html_Attributes$class('dropped-down')
 			]),
-		A2(_elm_lang$core$List$map, _user$project$TrackerComponents$downOption, _p8.otherSheets));
+		A2(_elm_lang$core$List$map, _user$project$TrackerHeader$downOption, _p1.otherSheets));
 };
-var _user$project$TrackerComponents$up = function (tracker) {
+var _user$project$TrackerHeader$up = function (tracker) {
 	return A2(
 		_elm_lang$html$Html$p,
 		_elm_lang$core$Native_List.fromArray(
@@ -8290,12 +8291,12 @@ var _user$project$TrackerComponents$up = function (tracker) {
 				_elm_lang$html$Html$text(tracker.sheet.name)
 			]));
 };
-var _user$project$TrackerComponents$dropdown = function (tracker) {
-	var _p9 = tracker;
-	var droppedDown = _p9.droppedDown;
-	return droppedDown ? _user$project$TrackerComponents$down(tracker) : _user$project$TrackerComponents$up(tracker);
+var _user$project$TrackerHeader$dropdown = function (tracker) {
+	var _p2 = tracker;
+	var droppedDown = _p2.droppedDown;
+	return droppedDown ? _user$project$TrackerHeader$down(tracker) : _user$project$TrackerHeader$up(tracker);
 };
-var _user$project$TrackerComponents$trackerHeader = function (tracker) {
+var _user$project$TrackerHeader$view = function (tracker) {
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -8416,7 +8417,7 @@ var _user$project$TrackerComponents$trackerHeader = function (tracker) {
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_user$project$TrackerComponents$dropdown(tracker)
+						_user$project$TrackerHeader$dropdown(tracker)
 					]))
 			]));
 };
@@ -8465,7 +8466,7 @@ var _user$project$TrackerView$header = function (model) {
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_user$project$TrackerComponents$trackerHeader(model),
+				_user$project$TrackerHeader$view(model),
 				_user$project$TrackerComponents$columnNumbers(model.sheet)
 			]));
 };

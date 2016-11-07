@@ -7,6 +7,7 @@ import Html.App          as App
 import Aliases           exposing (..)
 import List              exposing (map, map2)
 import TrackerComponents exposing (..)
+import TrackerHeader
 import TrackerTypes      exposing (..)
 
 
@@ -25,7 +26,7 @@ header : Model -> Html Msg
 header model =
   div 
   [ class "tracker-header" ] 
-  [ trackerHeader model
+  [ TrackerHeader.view model
   , columnNumbers model.sheet
   ]
 
