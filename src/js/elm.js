@@ -8816,10 +8816,10 @@ var _user$project$Tracker$update = F2(
 		}
 	});
 
-var _user$project$Main$packModel = function (m) {
+var _user$project$Update$packModel = function (m) {
 	return {ctor: '_Tuple2', _0: m, _1: _elm_lang$core$Platform_Cmd$none};
 };
-var _user$project$Main$updateTracker = F3(
+var _user$project$Update$updateTracker = F3(
 	function (name, tMsg, _p0) {
 		var _p1 = _p0;
 		return A2(
@@ -8830,7 +8830,7 @@ var _user$project$Main$updateTracker = F3(
 				_user$project$Dummies$dummyTracker,
 				A2(_elm_lang$core$Dict$get, name, _p1.trackerModels)));
 	});
-var _user$project$Main$syncTracker = F3(
+var _user$project$Update$syncTracker = F3(
 	function (sheets, _p2, tracker) {
 		return _elm_lang$core$Native_Utils.update(
 			tracker,
@@ -8842,13 +8842,13 @@ var _user$project$Main$syncTracker = F3(
 				otherSheets: _elm_lang$core$Dict$keys(sheets)
 			});
 	});
-var _user$project$Main$fixNames = F4(
+var _user$project$Update$fixNames = F4(
 	function (oldName, sheet, _p3, tracker) {
 		return _elm_lang$core$Native_Utils.eq(tracker.sheet.name, oldName) ? _elm_lang$core$Native_Utils.update(
 			tracker,
 			{sheet: sheet}) : tracker;
 	});
-var _user$project$Main$update = F2(
+var _user$project$Update$update = F2(
 	function (message, model) {
 		update:
 		while (true) {
@@ -8856,7 +8856,7 @@ var _user$project$Main$update = F2(
 			switch (_p4.ctor) {
 				case 'TrackerMsg':
 					var _p6 = _p4._0;
-					var _p5 = A3(_user$project$Main$updateTracker, _p6, _p4._1, model);
+					var _p5 = A3(_user$project$Update$updateTracker, _p6, _p4._1, model);
 					var tracker$ = _p5._0;
 					var message$ = _p5._1;
 					var _v2 = message$,
@@ -8895,7 +8895,7 @@ var _user$project$Main$update = F2(
 								A2(_elm_lang$core$Dict$remove, _p9, model.sheets)),
 							trackerModels: A2(
 								_elm_lang$core$Dict$map,
-								A2(_user$project$Main$fixNames, _p9, _p10),
+								A2(_user$project$Update$fixNames, _p9, _p10),
 								model.trackerModels)
 						});
 					message = _v6;
@@ -8905,13 +8905,13 @@ var _user$project$Main$update = F2(
 					var _p11 = model;
 					var trackerModels = _p11.trackerModels;
 					var sheets = _p11.sheets;
-					return _user$project$Main$packModel(
+					return _user$project$Update$packModel(
 						_elm_lang$core$Native_Utils.update(
 							model,
 							{
 								trackerModels: A2(
 									_elm_lang$core$Dict$map,
-									_user$project$Main$syncTracker(sheets),
+									_user$project$Update$syncTracker(sheets),
 									trackerModels)
 							}));
 				case 'NewSheet':
@@ -8947,7 +8947,7 @@ var _user$project$Main$update = F2(
 										_elm_lang$core$Dict$values(newSheets)));
 								return A2(
 									_elm_lang$core$Dict$map,
-									A2(_user$project$Main$fixNames, _p14, firstSheet),
+									A2(_user$project$Update$fixNames, _p14, firstSheet),
 									model.trackerModels);
 							}()
 						});
@@ -8955,10 +8955,11 @@ var _user$project$Main$update = F2(
 					model = _v11;
 					continue update;
 				default:
-					return _user$project$Main$packModel(model);
+					return _user$project$Update$packModel(model);
 			}
 		}
 	});
+
 var _user$project$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
 };
@@ -8967,7 +8968,7 @@ var _user$project$Main$main = {
 		{
 			init: {ctor: '_Tuple2', _0: _user$project$Init$initialModel, _1: _elm_lang$core$Platform_Cmd$none},
 			view: _user$project$View$view,
-			update: _user$project$Main$update,
+			update: _user$project$Update$update,
 			subscriptions: _user$project$Main$subscriptions
 		})
 };
@@ -8987,6 +8988,8 @@ Elm['Ports'] = Elm['Ports'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Ports'], 'Ports', typeof _user$project$Ports$main === 'undefined' ? null : _user$project$Ports$main);
 Elm['Types'] = Elm['Types'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Types'], 'Types', typeof _user$project$Types$main === 'undefined' ? null : _user$project$Types$main);
+Elm['Update'] = Elm['Update'] || {};
+_elm_lang$core$Native_Platform.addPublicModule(Elm['Update'], 'Update', typeof _user$project$Update$main === 'undefined' ? null : _user$project$Update$main);
 Elm['Util'] = Elm['Util'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Util'], 'Util', typeof _user$project$Util$main === 'undefined' ? null : _user$project$Util$main);
 Elm['View'] = Elm['View'] || {};
