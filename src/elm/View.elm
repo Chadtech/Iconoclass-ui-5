@@ -12,7 +12,7 @@ import List    exposing (map, map2, repeat)
 import Dict    exposing (Dict, toList, get)
 import Maybe   exposing (withDefault)
 import Dummies exposing (blankSheet, dummyTracker)
-import Debug exposing (log)
+
 
 leftMiddleRight : List String
 leftMiddleRight =

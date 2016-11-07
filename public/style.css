@@ -53,6 +53,16 @@ body {
   border: none;
   width: 42px;
 }
+.dropped-down {
+  margin-left: -1px;
+  margin-top: -1px;
+  width: 84px;
+  height: auto;
+  border: 1px #54574d solid;
+  position: fixed;
+  z-index: 9;
+  background: #2a2c27;
+}
 .point {
   margin: 0;
   position: relative;
@@ -67,15 +77,26 @@ body {
 .point.ignorable {
   color: #807872;
 }
-.tracker {
+.tracker-container {
   position: relative;
   border: 1px #54574d solid;
   width: 442px;
   height: 850px;
   float: left;
   margin: 5px;
+  overflow: hidden;
+}
+.tracker {
+  position: absolute;
+  top: 37px;
+  width: 442px;
+  height: 850px;
+  float: left;
   overflow-y: scroll;
-  overflow-x: hidden;
+}
+.tracker-header {
+  border-bottom: 1px #54574d solid;
+  height: 37px;
 }
 .index-cell {
   font-family: HFTIN;

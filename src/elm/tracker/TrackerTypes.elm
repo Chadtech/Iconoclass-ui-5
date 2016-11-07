@@ -4,16 +4,18 @@ import Aliases exposing (..)
 import List exposing (repeat)
 
 type alias Model =
-  { radix      : Int
-  , radixField : String
-  , sheet      : Sheet
+  { radix       : Int
+  , radixField  : String
+  , sheet       : Sheet
+  , droppedDown : Bool
   }
 
 initialModel : Model
 initialModel = 
-  { radix      = 16
-  , radixField = "16"
-  , sheet      = blankSheet
+  { radix       = 16
+  , radixField  = "16"
+  , sheet       = blankSheet
+  , droppedDown = False
   }
 
 blankSheet : Sheet
@@ -28,3 +30,5 @@ type Msg
   = UpdateRadix String
   | UpdateCell Index Index String
   | UpdateSheetName String
+  | Dropdown
+  | SetSheet String

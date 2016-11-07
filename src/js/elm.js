@@ -7915,11 +7915,15 @@ var _user$project$TrackerTypes$blankSheet = {
 	height: 256,
 	name: 'blank-sheet'
 };
-var _user$project$TrackerTypes$initialModel = {radix: 16, radixField: '16', sheet: _user$project$TrackerTypes$blankSheet};
-var _user$project$TrackerTypes$Model = F3(
-	function (a, b, c) {
-		return {radix: a, radixField: b, sheet: c};
+var _user$project$TrackerTypes$initialModel = {radix: 16, radixField: '16', sheet: _user$project$TrackerTypes$blankSheet, droppedDown: false};
+var _user$project$TrackerTypes$Model = F4(
+	function (a, b, c, d) {
+		return {radix: a, radixField: b, sheet: c, droppedDown: d};
 	});
+var _user$project$TrackerTypes$SetSheet = function (a) {
+	return {ctor: 'SetSheet', _0: a};
+};
+var _user$project$TrackerTypes$Dropdown = {ctor: 'Dropdown'};
 var _user$project$TrackerTypes$UpdateSheetName = function (a) {
 	return {ctor: 'UpdateSheetName', _0: a};
 };
@@ -7945,7 +7949,7 @@ var _user$project$Dummies$errorSheet = {
 	height: 64,
 	name: 'blank-sheet'
 };
-var _user$project$Dummies$dummyTracker = {radix: 16, radixField: '16', sheet: _user$project$Dummies$errorSheet};
+var _user$project$Dummies$dummyTracker = {radix: 16, radixField: '16', sheet: _user$project$Dummies$errorSheet, droppedDown: false};
 var _user$project$Dummies$blankSheet = {
 	data: A2(
 		_elm_lang$core$List$repeat,
@@ -8211,6 +8215,60 @@ var _user$project$TrackerComponents$column = _elm_lang$html$Html$div(
 		[
 			_elm_lang$html$Html_Attributes$class('column')
 		]));
+var _user$project$TrackerComponents$downOption = function (str) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('drop-down-option')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$p,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('index-cell'),
+						_elm_lang$html$Html_Events$onClick(
+						_user$project$TrackerTypes$SetSheet(str))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(str)
+					]))
+			]));
+};
+var _user$project$TrackerComponents$down = function (tracker) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('dropped-down')
+			]),
+		A2(
+			_elm_lang$core$List$map,
+			_user$project$TrackerComponents$downOption,
+			_elm_lang$core$Native_List.fromArray(
+				['wow', 'cool', 'okay'])));
+};
+var _user$project$TrackerComponents$up = function (tracker) {
+	return A2(
+		_elm_lang$html$Html$p,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('index-cell'),
+				_elm_lang$html$Html_Events$onClick(_user$project$TrackerTypes$Dropdown)
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text(tracker.sheet.name)
+			]));
+};
+var _user$project$TrackerComponents$dropdown = function (tracker) {
+	var _p7 = tracker;
+	var droppedDown = _p7.droppedDown;
+	return droppedDown ? _user$project$TrackerComponents$down(tracker) : _user$project$TrackerComponents$up(tracker);
+};
 var _user$project$TrackerComponents$trackerHeader = function (tracker) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -8322,6 +8380,16 @@ var _user$project$TrackerComponents$trackerHeader = function (tracker) {
 							]),
 						_elm_lang$core$Native_List.fromArray(
 							[]))
+					])),
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('column wide index')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$TrackerComponents$dropdown(tracker)
 					]))
 			]));
 };
@@ -8468,9 +8536,10 @@ var _user$project$Tracker$toCells = function (_p0) {
 		_p1.data,
 		_elm_lang$core$Native_List.range(0, _p1.height));
 };
-var _user$project$Tracker$view = function (model) {
-	var _p2 = model.sheet;
-	var name = _p2.name;
+var _user$project$Tracker$body = function (model) {
+	var _p2 = model;
+	var sheet = _p2.sheet;
+	var radix = _p2.radix;
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -8478,21 +8547,35 @@ var _user$project$Tracker$view = function (model) {
 				_elm_lang$html$Html_Attributes$class('tracker')
 			]),
 		A2(
-			F2(
-				function (x, y) {
-					return A2(_elm_lang$core$List_ops['::'], x, y);
-				}),
-			_user$project$TrackerComponents$trackerHeader(model),
-			A2(
-				F2(
-					function (x, y) {
-						return A2(_elm_lang$core$List_ops['::'], x, y);
-					}),
-				_user$project$TrackerComponents$columnNumbers(model.sheet),
-				A2(
-					_elm_lang$core$List$map,
-					A2(_user$project$TrackerComponents$rowView, name, model.radix),
-					_user$project$Tracker$toCells(model.sheet)))));
+			_elm_lang$core$List$map,
+			A2(_user$project$TrackerComponents$rowView, sheet.name, radix),
+			_user$project$Tracker$toCells(sheet)));
+};
+var _user$project$Tracker$header = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('tracker-header')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$TrackerComponents$trackerHeader(model),
+				_user$project$TrackerComponents$columnNumbers(model.sheet)
+			]));
+};
+var _user$project$Tracker$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('tracker-container')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$Tracker$header(model),
+				_user$project$Tracker$body(model)
+			]));
 };
 var _user$project$Tracker$toListDeep = function (_p3) {
 	return _elm_lang$core$Array$toList(
@@ -8564,7 +8647,7 @@ var _user$project$Tracker$update = F2(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{radixField: _p8, radix: newRadix}));
-			default:
+			case 'UpdateSheetName':
 				var _p9 = model;
 				var sheet = _p9.sheet;
 				return A2(
@@ -8579,6 +8662,15 @@ var _user$project$Tracker$update = F2(
 						_elm_lang$core$Native_Utils.update(
 							sheet,
 							{name: _p5._0})));
+			case 'Dropdown':
+				return _user$project$Tracker$packModel(
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							droppedDown: _elm_lang$core$Basics$not(model.droppedDown)
+						}));
+			default:
+				return _user$project$Tracker$packModel(model);
 		}
 	});
 

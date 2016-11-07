@@ -57,8 +57,6 @@ update message model =
           map (fixNames oldName sheet) model.trackerModels
       }
 
-
-
     SyncTrackers ->
       packModel
       { model 

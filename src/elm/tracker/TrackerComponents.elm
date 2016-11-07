@@ -74,7 +74,51 @@ trackerHeader tracker =
       ]
       []
     ]
+  , div
+    [ class "column wide index" ]
+    [ dropdown tracker]
   ]
+
+
+--        DROPPED DOWN
+
+
+dropdown : Model -> Html Msg
+dropdown tracker =
+  let {droppedDown} = tracker in
+  if droppedDown then
+    down tracker
+  else
+    up tracker
+
+up : Model -> Html Msg
+up tracker =
+  p 
+  [ class "index-cell" 
+  , onClick Dropdown
+  ]
+  [ text tracker.sheet.name ]
+
+down : Model -> Html Msg
+down tracker =
+  div
+  [ class "dropped-down" ]
+  (map downOption ["wow", "cool", "okay"])
+
+
+downOption : String -> Html Msg
+downOption str =
+  div 
+  [ class "drop-down-option" ]
+  [ p 
+    [ class "index-cell" 
+    , onClick (SetSheet str)
+    ] 
+    [ text str ]
+  ]
+
+--          COLUMN
+
 
 column : List (Html Msg) -> Html Msg
 column = div [ class "column" ]

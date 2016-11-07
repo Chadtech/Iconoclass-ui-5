@@ -24,9 +24,10 @@ errorSheet =
 
 dummyTracker : Model
 dummyTracker =
-  { radix      = 16
-  , radixField = "16"
-  , sheet      = errorSheet
+  { radix       = 16
+  , radixField  = "16"
+  , sheet       = errorSheet
+  , droppedDown = False
   }
 
 dummyRow : Int -> Array String

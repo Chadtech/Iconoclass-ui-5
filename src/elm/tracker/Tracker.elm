@@ -14,8 +14,6 @@ import Types
 import Dummies           exposing (dummyRow)
 import ParseInt          exposing (..)
 
-import Debug 
-
 
 update : Msg -> Model -> (Model, Types.Msg)
 update message model =
@@ -53,6 +51,15 @@ update message model =
       |>Types.UpdateSheetName sheet.name
       |>(,) model
 
+    Dropdown ->
+      packModel
+      { model 
+      | droppedDown = 
+          not model.droppedDown
+      }
+
+    SetSheet newSheetName ->
+      packModel model
 
 packModel : Model -> (Model, Types.Msg)
 packModel model = (model, Types.NoOp)
@@ -78,20 +85,35 @@ toListDeep : Array (Array String) -> List (List String)
 toListDeep = Array.map toList >> toList 
 
 
-
 --         VIEW
+
 
 view : Model -> Html Msg
 view model =
-  let {name} = model.sheet in
-  toCells model.sheet
-  |>map (rowView name model.radix)
-  |>(::) (columnNumbers model.sheet)
-  |>(::) (trackerHeader model)
+  div 
+  [ class "tracker-container" ]
+  [ header model
+  , body model
+  ]
+
+header : Model -> Html Msg
+header model =
+  div 
+  [ class "tracker-header" ] 
+  [ trackerHeader model
+  , columnNumbers model.sheet
+  ]
+
+body : Model -> Html Msg
+body model =
+  let {sheet, radix} = model in
+  toCells sheet
+  |>map (rowView sheet.name radix)
   |>div [ class "tracker" ]
 
 
 -- Tracker data formatting
+
 
 toCells : Sheet -> List Cells
 toCells {data, width, height} =
