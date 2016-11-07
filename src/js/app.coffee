@@ -1,11 +1,11 @@
 _         = require 'lodash'
 Elm       = require './elm.js'
 app       = Elm.Main.fullscreen()
-{request} = app.ports
+{save} = app.ports
 
 respond = (thing) ->
   app.ports.response.send thing
 
-request.subscribe (thing) ->
-  'this is a ' + thing
+save.subscribe (sheet) ->
+  console.log "SHEET", sheet
 

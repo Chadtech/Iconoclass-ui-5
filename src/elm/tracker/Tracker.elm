@@ -87,6 +87,9 @@ update message model =
       else
         (model, Types.RemoveSheet sheet.name)
 
+    Save ->
+      (model, Types.SaveSheet model.sheet)
+
     NoOp ->
       packModel model
 

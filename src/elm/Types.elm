@@ -12,6 +12,7 @@ type Msg
   | SyncTrackers
   | NewSheet String
   | RemoveSheet String
+  | SaveSheet Sheet
   | NoOp
 
 type alias Model =

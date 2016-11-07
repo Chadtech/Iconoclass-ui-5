@@ -28,3 +28,9 @@ newSheet newSheetName =
   , height = 256
   , name   = newSheetName
   }
+
+type alias IndexTriple =
+  { sheet : Int 
+  , row   : Int
+  , col   : Int
+  }

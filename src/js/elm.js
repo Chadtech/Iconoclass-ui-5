@@ -7916,6 +7916,10 @@ var _user$project$Aliases$Cell = F3(
 	function (a, b, c) {
 		return {ri: a, ci: b, content: c};
 	});
+var _user$project$Aliases$IndexTriple = F3(
+	function (a, b, c) {
+		return {sheet: a, row: b, col: c};
+	});
 
 var _user$project$TrackerTypes$blankSheet = {
 	data: A2(
@@ -7939,6 +7943,7 @@ var _user$project$TrackerTypes$Model = F5(
 		return {radix: a, radixField: b, sheet: c, droppedDown: d, otherSheets: e};
 	});
 var _user$project$TrackerTypes$NoOp = {ctor: 'NoOp'};
+var _user$project$TrackerTypes$Save = {ctor: 'Save'};
 var _user$project$TrackerTypes$CloseSheet = {ctor: 'CloseSheet'};
 var _user$project$TrackerTypes$NewSheet = {ctor: 'NewSheet'};
 var _user$project$TrackerTypes$SetSheet = function (a) {
@@ -7993,6 +7998,9 @@ var _user$project$Types$Model = F2(
 		return {sheets: a, trackerModels: b};
 	});
 var _user$project$Types$NoOp = {ctor: 'NoOp'};
+var _user$project$Types$SaveSheet = function (a) {
+	return {ctor: 'SaveSheet', _0: a};
+};
 var _user$project$Types$RemoveSheet = function (a) {
 	return {ctor: 'RemoveSheet', _0: a};
 };
@@ -8027,12 +8035,27 @@ var _user$project$Init$initialModel = {
 			]))
 };
 
-var _user$project$Ports$request = _elm_lang$core$Native_Platform.outgoingPort(
-	'request',
+var _user$project$Ports$focus = _elm_lang$core$Native_Platform.outgoingPort(
+	'focus',
 	function (v) {
-		return v;
+		return {sheet: v.sheet, row: v.row, col: v.col};
 	});
-var _user$project$Ports$response = _elm_lang$core$Native_Platform.incomingPort('response', _elm_lang$core$Json_Decode$string);
+var _user$project$Ports$save = _elm_lang$core$Native_Platform.outgoingPort(
+	'save',
+	function (v) {
+		return {
+			data: _elm_lang$core$Native_List.toArray(v.data).map(
+				function (v) {
+					return _elm_lang$core$Native_List.toArray(v).map(
+						function (v) {
+							return v;
+						});
+				}),
+			width: v.width,
+			height: v.height,
+			name: v.name
+		};
+	});
 
 var _user$project$Util$trimZeros = function (str) {
 	trimZeros:
@@ -8393,7 +8416,7 @@ var _user$project$TrackerHeader$view = function (tracker) {
 				A2(
 				_user$project$TrackerHeader$button,
 				'save',
-				_elm_lang$html$Html_Events$onClick(_user$project$TrackerTypes$NoOp)),
+				_elm_lang$html$Html_Events$onClick(_user$project$TrackerTypes$Save)),
 				A2(
 				_user$project$TrackerHeader$button,
 				'close',
@@ -8811,6 +8834,12 @@ var _user$project$Tracker$update = F2(
 					_0: model,
 					_1: _user$project$Types$RemoveSheet(sheet.name)
 				};
+			case 'Save':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$Types$SaveSheet(model.sheet)
+				};
 			default:
 				return _user$project$Tracker$packModel(model);
 		}
@@ -8954,6 +8983,12 @@ var _user$project$Update$update = F2(
 					message = _v10;
 					model = _v11;
 					continue update;
+				case 'SaveSheet':
+					return {
+						ctor: '_Tuple2',
+						_0: model,
+						_1: _user$project$Ports$save(_p4._0)
+					};
 				default:
 					return _user$project$Update$packModel(model);
 			}

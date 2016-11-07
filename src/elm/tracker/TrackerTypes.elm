@@ -36,4 +36,5 @@ type Msg
   | SetSheet String
   | NewSheet
   | CloseSheet
+  | Save
   | NoOp

@@ -85,7 +85,9 @@ update message model =
       }
       |>update SyncTrackers
 
-      
+    SaveSheet sheet ->
+      (model, save sheet)
+
     NoOp -> packModel model
 
 

@@ -1,7 +1,8 @@
 port module Ports exposing (..)
 
 import Types exposing (..)
+import Aliases exposing (..)
 
-port request : String -> Cmd msg
+port focus : IndexTriple -> Cmd msg
 
-port response : (String -> msg) -> Sub msg
+port save : Sheet -> Cmd msg
