@@ -80,7 +80,7 @@ body
 
 .dropped-down
   margin-left -1px
-  margin-top -1px
+  margin-top -2px
   width 84px
   height auto
   border 1px veryIgnorable solid
@@ -89,9 +89,11 @@ body
   background veryVeryIgnorable
 
 .drop-down-option
-  width 84px
+  width 82px
   height 13px
   border 1px veryIgnorable solid
+  &:hover
+    border 1px pointColor solid
 
 .point
   margin 0
@@ -136,6 +138,7 @@ body
   font-smooth none
   -webkit-font-smoothing none
   text-align center
+  cursor pointer
   
 .field
   background none
@@ -165,7 +168,7 @@ body
   color actualBlack
   font-smooth none
   -webkit-font-smoothing none 
-  margin-right
+  cursor pointer
   &:hover
     color pointColor
   &:active

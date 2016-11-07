@@ -55,7 +55,7 @@ body {
 }
 .dropped-down {
   margin-left: -1px;
-  margin-top: -1px;
+  margin-top: -2px;
   width: 84px;
   height: auto;
   border: 1px #54574d solid;
@@ -64,9 +64,12 @@ body {
   background: #2a2c27;
 }
 .drop-down-option {
-  width: 84px;
+  width: 82px;
   height: 13px;
   border: 1px #54574d solid;
+}
+.drop-down-option:hover {
+  border: 1px #b0a69a solid;
 }
 .point {
   margin: 0;
@@ -112,6 +115,7 @@ body {
   font-smooth: none;
   -webkit-font-smoothing: none;
   text-align: center;
+  cursor: pointer;
 }
 .field {
   background: none;
@@ -142,8 +146,8 @@ body {
   color: #000;
   font-smooth: none;
   -webkit-font-smoothing: none;
+  cursor: pointer;
 }
-.button margin-right,
 .button:hover {
   color: #b0a69a;
 }
