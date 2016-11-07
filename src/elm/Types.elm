@@ -11,6 +11,7 @@ type Msg
   | UpdateSheetName String Sheet
   | SyncTrackers
   | NewSheet String
+  | RemoveSheet String
   | NoOp
 
 type alias Model =

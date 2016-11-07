@@ -5,7 +5,7 @@ import Html.Attributes   exposing (..)
 import Html.Events       exposing (..)
 import Html.App          as App
 import Aliases           exposing (..)
-import List              exposing (map, member)
+import List              exposing (map, member, length)
 import String            exposing (append, slice)
 import TrackerComponents exposing (..)
 import TrackerTypes      exposing (..)
@@ -79,6 +79,13 @@ update message model =
       | sheet = { sheet | name = newName }
       }
       (Types.NewSheet newName)
+
+    CloseSheet ->
+      let {otherSheets, sheet} = model in
+      if length otherSheets == 1 then
+        packModel model
+      else
+        (model, Types.RemoveSheet sheet.name)
 
     NoOp ->
       packModel model

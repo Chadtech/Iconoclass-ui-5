@@ -7,7 +7,8 @@ import View             exposing (view)
 import Init             exposing (initialModel)
 import TrackerTypes
 import Tracker
-import Dict             exposing (Dict, map, get, insert, remove, keys)
+import Dict             exposing (Dict, map, get, insert, remove, keys, values)
+import List             exposing (head)
 import Aliases          exposing (..)
 import Maybe            exposing (withDefault)
 import Dummies          exposing (dummyTracker, errorSheet, blankSheet)
@@ -75,8 +76,27 @@ update message model =
             sheets
       }
       |>update SyncTrackers
+
+    RemoveSheet name ->
+      let
+        newSheets = 
+          remove name model.sheets
+      in
+      { model 
+      | sheets = newSheets
+      , trackerModels =
+          let
+            firstSheet =
+              head (values newSheets)
+              |>withDefault errorSheet
+          in
+          map (fixNames name firstSheet) model.trackerModels
+      }
+      |>update SyncTrackers
+
       
     NoOp -> packModel model
+
 
 
 fixNames : String -> Sheet -> String -> TrackerTypes.Model -> TrackerTypes.Model

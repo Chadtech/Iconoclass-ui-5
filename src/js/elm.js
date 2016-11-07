@@ -7939,6 +7939,7 @@ var _user$project$TrackerTypes$Model = F5(
 		return {radix: a, radixField: b, sheet: c, droppedDown: d, otherSheets: e};
 	});
 var _user$project$TrackerTypes$NoOp = {ctor: 'NoOp'};
+var _user$project$TrackerTypes$CloseSheet = {ctor: 'CloseSheet'};
 var _user$project$TrackerTypes$NewSheet = {ctor: 'NewSheet'};
 var _user$project$TrackerTypes$SetSheet = function (a) {
 	return {ctor: 'SetSheet', _0: a};
@@ -7992,6 +7993,9 @@ var _user$project$Types$Model = F2(
 		return {sheets: a, trackerModels: b};
 	});
 var _user$project$Types$NoOp = {ctor: 'NoOp'};
+var _user$project$Types$RemoveSheet = function (a) {
+	return {ctor: 'RemoveSheet', _0: a};
+};
 var _user$project$Types$NewSheet = function (a) {
 	return {ctor: 'NewSheet', _0: a};
 };
@@ -8393,7 +8397,7 @@ var _user$project$TrackerHeader$view = function (tracker) {
 				A2(
 				_user$project$TrackerHeader$button,
 				'close',
-				_elm_lang$html$Html_Events$onClick(_user$project$TrackerTypes$NoOp)),
+				_elm_lang$html$Html_Events$onClick(_user$project$TrackerTypes$CloseSheet)),
 				_user$project$TrackerHeader$dropdown(tracker)
 			]));
 };
@@ -8796,6 +8800,17 @@ var _user$project$Tracker$update = F2(
 								{name: newName})
 						}),
 					_user$project$Types$NewSheet(newName));
+			case 'CloseSheet':
+				var _p11 = model;
+				var otherSheets = _p11.otherSheets;
+				var sheet = _p11.sheet;
+				return _elm_lang$core$Native_Utils.eq(
+					_elm_lang$core$List$length(otherSheets),
+					1) ? _user$project$Tracker$packModel(model) : {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$Types$RemoveSheet(sheet.name)
+				};
 			default:
 				return _user$project$Tracker$packModel(model);
 		}
@@ -8915,6 +8930,29 @@ var _user$project$Main$update = F2(
 						});
 					message = _v8;
 					model = _v9;
+					continue update;
+				case 'RemoveSheet':
+					var _p14 = _p4._0;
+					var newSheets = A2(_elm_lang$core$Dict$remove, _p14, model.sheets);
+					var _v10 = _user$project$Types$SyncTrackers,
+						_v11 = _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							sheets: newSheets,
+							trackerModels: function () {
+								var firstSheet = A2(
+									_elm_lang$core$Maybe$withDefault,
+									_user$project$Dummies$errorSheet,
+									_elm_lang$core$List$head(
+										_elm_lang$core$Dict$values(newSheets)));
+								return A2(
+									_elm_lang$core$Dict$map,
+									A2(_user$project$Main$fixNames, _p14, firstSheet),
+									model.trackerModels);
+							}()
+						});
+					message = _v10;
+					model = _v11;
 					continue update;
 				default:
 					return _user$project$Main$packModel(model);
