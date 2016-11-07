@@ -10,6 +10,7 @@ type Msg
   | UpdateSheet Sheet
   | UpdateSheetName String Sheet
   | SyncTrackers
+  | NewSheet String
   | NoOp
 
 type alias Model =

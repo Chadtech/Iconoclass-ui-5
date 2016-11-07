@@ -1,6 +1,8 @@
 module Aliases exposing (..)
 
 import Array exposing (Array)
+import List  exposing (repeat)
+
 
 type alias Sheet = 
   { data   : List Row
@@ -17,4 +19,12 @@ type alias Cell  =
   { ri      : Int
   , ci      : Int
   , content : String
+  }
+
+newSheet : String -> Sheet
+newSheet newSheetName =
+  { data   = repeat 256 (repeat 9 "")
+  , width  = 9
+  , height = 256
+  , name   = newSheetName
   }

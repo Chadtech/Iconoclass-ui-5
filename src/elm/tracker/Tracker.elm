@@ -5,7 +5,8 @@ import Html.Attributes   exposing (..)
 import Html.Events       exposing (..)
 import Html.App          as App
 import Aliases           exposing (..)
-import List              exposing (map, map2, length, repeat)
+import List              exposing (map, map2, length, repeat, member)
+import String            exposing (append, slice)
 import TrackerComponents exposing (..)
 import TrackerTypes      exposing (..)
 import Array             exposing (fromList, toList, Array, set, get)
@@ -13,6 +14,8 @@ import Maybe             exposing (withDefault, Maybe)
 import Types
 import Dummies           exposing (dummyRow)
 import ParseInt          exposing (..)
+
+import Debug
 
 
 update : Msg -> Model -> (Model, Types.Msg)
@@ -51,21 +54,69 @@ update message model =
       |>Types.UpdateSheetName sheet.name
       |>(,) model
 
-    Dropdown ->
+    DropDown ->
       packModel
-      { model 
-      | droppedDown = 
-          not model.droppedDown
-      }
+      { model | droppedDown = True }
 
-    SetSheet newSheetName ->
-      packModel model
+    SetSheet sheetName ->
+      let {sheet} = model in
+      (,)
+      { model
+      | sheet =
+        { sheet | name = sheetName }
+      , droppedDown = False
+      }
+      Types.SyncTrackers
+
+    NewSheet ->
+      let 
+        {sheet, otherSheets} = model
+
+        newName =
+          getNewSheetName otherSheets
+      in
+      (,)
+      { model
+      | sheet = { sheet | name = newName }
+      }
+      (Types.NewSheet newName)
+
 
 packModel : Model -> (Model, Types.Msg)
 packModel model = (model, Types.NoOp)
 
+getNewSheetName : List String -> String
+getNewSheetName sheetNames =
+  if member "blank-sheet" sheetNames then
+    generateNewSheetName "blank-sheet-1" sheetNames
+  else 
+    "blank-sheet"
+
+generateNewSheetName : String -> List String -> String
+generateNewSheetName name sheetNames =
+  if member name sheetNames then
+    let
+      nextName =
+        slice 12 14 name
+        |>parseInt
+        |>handleInt
+        |>(+) 1
+        |>toString
+        |>append (slice 0 12 name)
+    in
+    generateNewSheetName nextName sheetNames
+  else
+    name
+
+handleInt : Result Error Int -> Int
+handleInt result =
+  case result of
+    Ok i -> i 
+    Err _ -> 9
+
 
 --      LIST MODIFICATION
+
 
 setElement : Int -> Index -> Index -> String -> Array (Array String) -> Array (Array String)
 setElement width ri ci str sheet =

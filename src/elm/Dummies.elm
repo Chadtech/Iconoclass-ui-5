@@ -28,6 +28,7 @@ dummyTracker =
   , radixField  = "16"
   , sheet       = errorSheet
   , droppedDown = False
+  , otherSheets = [ "blank-sheet" ]
   }
 
 dummyRow : Int -> Array String

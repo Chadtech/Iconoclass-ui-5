@@ -47,6 +47,7 @@ trackerHeader tracker =
       [ class "button"
       , type' "submit"
       , value "new"
+      , onClick NewSheet
       ]
       []
     ]
@@ -76,7 +77,7 @@ trackerHeader tracker =
     ]
   , div
     [ class "column wide index" ]
-    [ dropdown tracker]
+    [ dropdown tracker ]
   ]
 
 
@@ -95,15 +96,15 @@ up : Model -> Html Msg
 up tracker =
   p 
   [ class "index-cell" 
-  , onClick Dropdown
+  , onClick DropDown
   ]
   [ text tracker.sheet.name ]
 
 down : Model -> Html Msg
-down tracker =
+down {otherSheets} =
   div
   [ class "dropped-down" ]
-  (map downOption ["wow", "cool", "okay"])
+  (map downOption otherSheets)
 
 
 downOption : String -> Html Msg
@@ -116,6 +117,7 @@ downOption str =
     ] 
     [ text str ]
   ]
+
 
 --          COLUMN
 

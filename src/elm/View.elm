@@ -9,7 +9,7 @@ import Tracker
 import TrackerTypes
 import Aliases exposing (..)
 import List    exposing (map, map2, repeat)
-import Dict    exposing (Dict, toList, get)
+import Dict    exposing (Dict, toList, get, keys)
 import Maybe   exposing (withDefault)
 import Dummies exposing (blankSheet, dummyTracker)
 

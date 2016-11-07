@@ -63,6 +63,11 @@ body {
   z-index: 9;
   background: #2a2c27;
 }
+.drop-down-option {
+  width: 84px;
+  height: 13px;
+  border: 1px #54574d solid;
+}
 .point {
   margin: 0;
   position: relative;

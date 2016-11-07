@@ -7,10 +7,10 @@ import View             exposing (view)
 import Init             exposing (initialModel)
 import TrackerTypes
 import Tracker
-import Dict             exposing (Dict, map, get, insert, remove)
+import Dict             exposing (Dict, map, get, insert, remove, keys)
 import Aliases          exposing (..)
 import Maybe            exposing (withDefault)
-import Dummies          exposing (dummyTracker, errorSheet)
+import Dummies          exposing (dummyTracker, errorSheet, blankSheet)
 import Debug exposing (log)
 
 main =
@@ -48,7 +48,6 @@ update message model =
       |>update SyncTrackers
 
     UpdateSheetName oldName sheet ->
-      packModel
       { model
       | sheets =
           remove oldName model.sheets
@@ -56,15 +55,28 @@ update message model =
       , trackerModels = 
           map (fixNames oldName sheet) model.trackerModels
       }
+      |>update SyncTrackers
 
     SyncTrackers ->
+      let {trackerModels, sheets} = model in
       packModel
       { model 
       | trackerModels =
-          model.trackerModels
-          |>map (syncTracker model.sheets)
+          trackerModels
+          |>map (syncTracker sheets)
       }
 
+    NewSheet newSheetName ->
+      let {sheets} = model in
+      { model
+      | sheets =
+          insert 
+            newSheetName 
+            (newSheet newSheetName)
+            sheets
+      }
+      |>update SyncTrackers
+      
     NoOp -> packModel model
 
 
@@ -80,6 +92,7 @@ syncTracker sheets _ tracker =
   | sheet = 
       get tracker.sheet.name sheets
       |>withDefault errorSheet
+  , otherSheets = keys sheets
   }
 
 updateTracker : String -> TrackerTypes.Msg -> Model -> (TrackerTypes.Model, Msg)

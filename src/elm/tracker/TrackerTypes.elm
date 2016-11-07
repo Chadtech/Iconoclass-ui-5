@@ -8,6 +8,7 @@ type alias Model =
   , radixField  : String
   , sheet       : Sheet
   , droppedDown : Bool
+  , otherSheets : List String
   }
 
 initialModel : Model
@@ -16,6 +17,7 @@ initialModel =
   , radixField  = "16"
   , sheet       = blankSheet
   , droppedDown = False
+  , otherSheets = [ "blank-sheet" ]
   }
 
 blankSheet : Sheet
@@ -30,5 +32,6 @@ type Msg
   = UpdateRadix String
   | UpdateCell Index Index String
   | UpdateSheetName String
-  | Dropdown
+  | DropDown
   | SetSheet String
+  | NewSheet
