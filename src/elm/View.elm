@@ -5,24 +5,24 @@ import Html.App
 import Html.Attributes  exposing (..)
 import Html.Events      exposing (..)
 import Types            exposing (..)
-import Tracker
+import TrackerView as Tracker
 import TrackerTypes
 import Aliases exposing (..)
-import List    exposing (map, map2, repeat)
-import Dict    exposing (Dict, toList, get, keys)
+import List    exposing (map, map2)
+import Dict    exposing (Dict, get)
 import Maybe   exposing (withDefault)
-import Dummies exposing (blankSheet, dummyTracker)
+import Dummies exposing (dummyTracker)
 
-
-leftMiddleRight : List String
-leftMiddleRight =
-  [ "left", "middle", "right"]
 
 view : Model -> Html Msg
 view model = 
   div
   [ class "main" ]
   (renderTrackers model)
+
+leftMiddleRight : List String
+leftMiddleRight =
+  [ "left", "middle", "right"]
 
 renderTrackers : Model -> List (Html Msg)
 renderTrackers model  =

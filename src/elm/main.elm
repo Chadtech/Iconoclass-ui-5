@@ -11,7 +11,6 @@ import Dict             exposing (Dict, map, get, insert, remove, keys)
 import Aliases          exposing (..)
 import Maybe            exposing (withDefault)
 import Dummies          exposing (dummyTracker, errorSheet, blankSheet)
-import Debug exposing (log)
 
 main =
   App.program

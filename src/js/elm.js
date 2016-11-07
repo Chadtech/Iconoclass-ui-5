@@ -8421,6 +8421,111 @@ var _user$project$TrackerComponents$trackerHeader = function (tracker) {
 			]));
 };
 
+var _user$project$TrackerView$columnToCell = F3(
+	function (ri, content, ci) {
+		return A3(_user$project$Aliases$Cell, ri, ci, content);
+	});
+var _user$project$TrackerView$rowToCells = F3(
+	function (width, r, i) {
+		return A3(
+			_elm_lang$core$List$map2,
+			_user$project$TrackerView$columnToCell(i),
+			r,
+			_elm_lang$core$Native_List.range(0, width - 1));
+	});
+var _user$project$TrackerView$toCells = function (_p0) {
+	var _p1 = _p0;
+	return A3(
+		_elm_lang$core$List$map2,
+		_user$project$TrackerView$rowToCells(_p1.width),
+		_p1.data,
+		_elm_lang$core$Native_List.range(0, _p1.height));
+};
+var _user$project$TrackerView$body = function (model) {
+	var _p2 = model;
+	var sheet = _p2.sheet;
+	var radix = _p2.radix;
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('tracker')
+			]),
+		A2(
+			_elm_lang$core$List$map,
+			A2(_user$project$TrackerComponents$rowView, sheet.name, radix),
+			_user$project$TrackerView$toCells(sheet)));
+};
+var _user$project$TrackerView$header = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('tracker-header')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$TrackerComponents$trackerHeader(model),
+				_user$project$TrackerComponents$columnNumbers(model.sheet)
+			]));
+};
+var _user$project$TrackerView$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('tracker-container')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$TrackerView$header(model),
+				_user$project$TrackerView$body(model)
+			]));
+};
+
+var _user$project$View$orderTrackers = F2(
+	function (models, name) {
+		return A2(
+			_elm_lang$core$Maybe$withDefault,
+			_user$project$Dummies$dummyTracker,
+			A2(_elm_lang$core$Dict$get, name, models));
+	});
+var _user$project$View$linkTrackerView = F2(
+	function (name, html) {
+		return A2(
+			_elm_lang$html$Html_App$map,
+			_user$project$Types$TrackerMsg(name),
+			html);
+	});
+var _user$project$View$render = function (_p0) {
+	var _p1 = _p0;
+	return function (_p2) {
+		return _user$project$TrackerView$view(
+			A2(_user$project$View$orderTrackers, _p1.trackerModels, _p2));
+	};
+};
+var _user$project$View$leftMiddleRight = _elm_lang$core$Native_List.fromArray(
+	['left', 'middle', 'right']);
+var _user$project$View$renderTrackers = function (model) {
+	return A3(
+		_elm_lang$core$List$map2,
+		_user$project$View$linkTrackerView,
+		_user$project$View$leftMiddleRight,
+		A2(
+			_elm_lang$core$List$map,
+			_user$project$View$render(model),
+			_user$project$View$leftMiddleRight));
+};
+var _user$project$View$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('main')
+			]),
+		_user$project$View$renderTrackers(model));
+};
+
 var _user$project$ParseInt$charFromInt = function (i) {
 	return (_elm_lang$core$Native_Utils.cmp(i, 10) < 0) ? _elm_lang$core$Char$fromCode(
 		i + _elm_lang$core$Char$toCode(
@@ -8543,74 +8648,13 @@ var _user$project$ParseInt$parseInt = _user$project$ParseInt$parseIntRadix(10);
 var _user$project$ParseInt$parseIntOct = _user$project$ParseInt$parseIntRadix(8);
 var _user$project$ParseInt$parseIntHex = _user$project$ParseInt$parseIntRadix(16);
 
-var _user$project$Tracker$columnToCell = F3(
-	function (ri, content, ci) {
-		return A3(_user$project$Aliases$Cell, ri, ci, content);
-	});
-var _user$project$Tracker$rowToCells = F3(
-	function (width, r, i) {
-		return A3(
-			_elm_lang$core$List$map2,
-			_user$project$Tracker$columnToCell(i),
-			r,
-			_elm_lang$core$Native_List.range(0, width - 1));
-	});
-var _user$project$Tracker$toCells = function (_p0) {
-	var _p1 = _p0;
-	return A3(
-		_elm_lang$core$List$map2,
-		_user$project$Tracker$rowToCells(_p1.width),
-		_p1.data,
-		_elm_lang$core$Native_List.range(0, _p1.height));
-};
-var _user$project$Tracker$body = function (model) {
-	var _p2 = model;
-	var sheet = _p2.sheet;
-	var radix = _p2.radix;
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html_Attributes$class('tracker')
-			]),
-		A2(
-			_elm_lang$core$List$map,
-			A2(_user$project$TrackerComponents$rowView, sheet.name, radix),
-			_user$project$Tracker$toCells(sheet)));
-};
-var _user$project$Tracker$header = function (model) {
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html_Attributes$class('tracker-header')
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_user$project$TrackerComponents$trackerHeader(model),
-				_user$project$TrackerComponents$columnNumbers(model.sheet)
-			]));
-};
-var _user$project$Tracker$view = function (model) {
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html_Attributes$class('tracker-container')
-			]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_user$project$Tracker$header(model),
-				_user$project$Tracker$body(model)
-			]));
-};
-var _user$project$Tracker$toListDeep = function (_p3) {
+var _user$project$Tracker$toListDeep = function (_p0) {
 	return _elm_lang$core$Array$toList(
-		A2(_elm_lang$core$Array$map, _elm_lang$core$Array$toList, _p3));
+		A2(_elm_lang$core$Array$map, _elm_lang$core$Array$toList, _p0));
 };
-var _user$project$Tracker$toArrayDeep = function (_p4) {
+var _user$project$Tracker$toArrayDeep = function (_p1) {
 	return _elm_lang$core$Array$fromList(
-		A2(_elm_lang$core$List$map, _elm_lang$core$Array$fromList, _p4));
+		A2(_elm_lang$core$List$map, _elm_lang$core$Array$fromList, _p1));
 };
 var _user$project$Tracker$setElement = F5(
 	function (width, ri, ci, str, sheet) {
@@ -8628,54 +8672,56 @@ var _user$project$Tracker$setElement = F5(
 		return setter(sheet);
 	});
 var _user$project$Tracker$handleInt = function (result) {
-	var _p5 = result;
-	if (_p5.ctor === 'Ok') {
-		return _p5._0;
+	var _p2 = result;
+	if (_p2.ctor === 'Ok') {
+		return _p2._0;
 	} else {
 		return 9;
 	}
 };
-var _user$project$Tracker$generateNewSheetName = F2(
-	function (name, sheetNames) {
-		generateNewSheetName:
+var _user$project$Tracker$incrementName = function (name) {
+	return A2(
+		_elm_lang$core$String$append,
+		A3(_elm_lang$core$String$slice, 0, 12, name),
+		_elm_lang$core$Basics$toString(
+			A2(
+				F2(
+					function (x, y) {
+						return x + y;
+					}),
+				1,
+				_user$project$Tracker$handleInt(
+					_user$project$ParseInt$parseInt(
+						A3(_elm_lang$core$String$slice, 12, 14, name))))));
+};
+var _user$project$Tracker$makeNewName = F2(
+	function (name, names) {
+		makeNewName:
 		while (true) {
-			if (A2(_elm_lang$core$List$member, name, sheetNames)) {
-				var nextName = A2(
-					_elm_lang$core$String$append,
-					A3(_elm_lang$core$String$slice, 0, 12, name),
-					_elm_lang$core$Basics$toString(
-						A2(
-							F2(
-								function (x, y) {
-									return x + y;
-								}),
-							1,
-							_user$project$Tracker$handleInt(
-								_user$project$ParseInt$parseInt(
-									A3(_elm_lang$core$String$slice, 12, 14, name))))));
-				var _v2 = nextName,
-					_v3 = sheetNames;
-				name = _v2;
-				sheetNames = _v3;
-				continue generateNewSheetName;
+			if (A2(_elm_lang$core$List$member, name, names)) {
+				var _v1 = _user$project$Tracker$incrementName(name),
+					_v2 = names;
+				name = _v1;
+				names = _v2;
+				continue makeNewName;
 			} else {
 				return name;
 			}
 		}
 	});
-var _user$project$Tracker$getNewSheetName = function (sheetNames) {
-	return A2(_elm_lang$core$List$member, 'blank-sheet', sheetNames) ? A2(_user$project$Tracker$generateNewSheetName, 'blank-sheet-1', sheetNames) : 'blank-sheet';
+var _user$project$Tracker$getNewSheetName = function (names) {
+	return A2(_elm_lang$core$List$member, 'blank-sheet', names) ? A2(_user$project$Tracker$makeNewName, 'blank-sheet-1', names) : 'blank-sheet';
 };
 var _user$project$Tracker$packModel = function (model) {
 	return {ctor: '_Tuple2', _0: model, _1: _user$project$Types$NoOp};
 };
 var _user$project$Tracker$update = F2(
 	function (message, model) {
-		var _p6 = message;
-		switch (_p6.ctor) {
+		var _p3 = message;
+		switch (_p3.ctor) {
 			case 'UpdateCell':
-				var _p7 = model;
-				var sheet = _p7.sheet;
+				var _p4 = model;
+				var sheet = _p4.sheet;
 				return A2(
 					F2(
 						function (v0, v1) {
@@ -8686,24 +8732,29 @@ var _user$project$Tracker$update = F2(
 						_elm_lang$core$Native_Utils.update(
 							sheet,
 							{
-								data: _user$project$Tracker$toListDeep(
-									A5(
-										_user$project$Tracker$setElement,
-										sheet.width,
-										_p6._0,
-										_p6._1,
-										_p6._2,
-										_user$project$Tracker$toArrayDeep(sheet.data)))
+								data: function () {
+									var _p5 = sheet;
+									var data = _p5.data;
+									var width = _p5.width;
+									return _user$project$Tracker$toListDeep(
+										A5(
+											_user$project$Tracker$setElement,
+											width,
+											_p3._0,
+											_p3._1,
+											_p3._2,
+											_user$project$Tracker$toArrayDeep(data)));
+								}()
 							})));
 			case 'UpdateRadix':
-				var _p9 = _p6._0;
+				var _p7 = _p3._0;
 				var newRadix = function () {
-					if (_elm_lang$core$Native_Utils.eq(_p9, '')) {
+					if (_elm_lang$core$Native_Utils.eq(_p7, '')) {
 						return model.radix;
 					} else {
-						var _p8 = _user$project$ParseInt$parseInt(_p9);
-						if (_p8.ctor === 'Ok') {
-							return _p8._0;
+						var _p6 = _user$project$ParseInt$parseInt(_p7);
+						if (_p6.ctor === 'Ok') {
+							return _p6._0;
 						} else {
 							return 2;
 						}
@@ -8712,10 +8763,10 @@ var _user$project$Tracker$update = F2(
 				return _user$project$Tracker$packModel(
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{radixField: _p9, radix: newRadix}));
+						{radixField: _p7, radix: newRadix}));
 			case 'UpdateSheetName':
-				var _p10 = model;
-				var sheet = _p10.sheet;
+				var _p8 = model;
+				var sheet = _p8.sheet;
 				return A2(
 					F2(
 						function (v0, v1) {
@@ -8727,15 +8778,15 @@ var _user$project$Tracker$update = F2(
 						sheet.name,
 						_elm_lang$core$Native_Utils.update(
 							sheet,
-							{name: _p6._0})));
+							{name: _p3._0})));
 			case 'DropDown':
 				return _user$project$Tracker$packModel(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{droppedDown: true}));
 			case 'SetSheet':
-				var _p11 = model;
-				var sheet = _p11.sheet;
+				var _p9 = model;
+				var sheet = _p9.sheet;
 				return A2(
 					F2(
 						function (v0, v1) {
@@ -8746,14 +8797,14 @@ var _user$project$Tracker$update = F2(
 						{
 							sheet: _elm_lang$core$Native_Utils.update(
 								sheet,
-								{name: _p6._0}),
+								{name: _p3._0}),
 							droppedDown: false
 						}),
 					_user$project$Types$SyncTrackers);
 			default:
-				var _p12 = model;
-				var sheet = _p12.sheet;
-				var otherSheets = _p12.otherSheets;
+				var _p10 = model;
+				var sheet = _p10.sheet;
+				var otherSheets = _p10.otherSheets;
 				var newName = _user$project$Tracker$getNewSheetName(otherSheets);
 				return A2(
 					F2(
@@ -8770,49 +8821,6 @@ var _user$project$Tracker$update = F2(
 					_user$project$Types$NewSheet(newName));
 		}
 	});
-
-var _user$project$View$orderTrackers = F2(
-	function (models, name) {
-		return A2(
-			_elm_lang$core$Maybe$withDefault,
-			_user$project$Dummies$dummyTracker,
-			A2(_elm_lang$core$Dict$get, name, models));
-	});
-var _user$project$View$linkTrackerView = F2(
-	function (name, html) {
-		return A2(
-			_elm_lang$html$Html_App$map,
-			_user$project$Types$TrackerMsg(name),
-			html);
-	});
-var _user$project$View$render = function (_p0) {
-	var _p1 = _p0;
-	return function (_p2) {
-		return _user$project$Tracker$view(
-			A2(_user$project$View$orderTrackers, _p1.trackerModels, _p2));
-	};
-};
-var _user$project$View$leftMiddleRight = _elm_lang$core$Native_List.fromArray(
-	['left', 'middle', 'right']);
-var _user$project$View$renderTrackers = function (model) {
-	return A3(
-		_elm_lang$core$List$map2,
-		_user$project$View$linkTrackerView,
-		_user$project$View$leftMiddleRight,
-		A2(
-			_elm_lang$core$List$map,
-			_user$project$View$render(model),
-			_user$project$View$leftMiddleRight));
-};
-var _user$project$View$view = function (model) {
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html_Attributes$class('main')
-			]),
-		_user$project$View$renderTrackers(model));
-};
 
 var _user$project$Main$packModel = function (m) {
 	return {ctor: '_Tuple2', _0: m, _1: _elm_lang$core$Platform_Cmd$none};

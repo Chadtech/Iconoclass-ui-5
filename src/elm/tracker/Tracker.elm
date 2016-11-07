@@ -5,7 +5,7 @@ import Html.Attributes   exposing (..)
 import Html.Events       exposing (..)
 import Html.App          as App
 import Aliases           exposing (..)
-import List              exposing (map, map2, length, repeat, member)
+import List              exposing (map, member)
 import String            exposing (append, slice)
 import TrackerComponents exposing (..)
 import TrackerTypes      exposing (..)
@@ -14,20 +14,19 @@ import Maybe             exposing (withDefault, Maybe)
 import Types
 import Dummies           exposing (dummyRow)
 import ParseInt          exposing (..)
-
-import Debug
+import TrackerView       exposing (view)
 
 
 update : Msg -> Model -> (Model, Types.Msg)
 update message model =
   case message of
-    UpdateCell ri ci newContent ->
+    UpdateCell ri ci str ->
       let {sheet} = model in
       { sheet
       | data =
-          sheet.data
-          |>toArrayDeep
-          |>setElement sheet.width ri ci newContent
+          let {data, width} = sheet in
+          toArrayDeep data
+          |>setElement width ri ci str
           |>toListDeep
       }
       |>Types.UpdateSheet
@@ -86,25 +85,16 @@ packModel : Model -> (Model, Types.Msg)
 packModel model = (model, Types.NoOp)
 
 getNewSheetName : List String -> String
-getNewSheetName sheetNames =
-  if member "blank-sheet" sheetNames then
-    generateNewSheetName "blank-sheet-1" sheetNames
+getNewSheetName names =
+  if member "blank-sheet" names then
+    makeNewName "blank-sheet-1" names
   else 
     "blank-sheet"
 
-generateNewSheetName : String -> List String -> String
-generateNewSheetName name sheetNames =
-  if member name sheetNames then
-    let
-      nextName =
-        slice 12 14 name
-        |>parseInt
-        |>handleInt
-        |>(+) 1
-        |>toString
-        |>append (slice 0 12 name)
-    in
-    generateNewSheetName nextName sheetNames
+makeNewName : String -> List String -> String
+makeNewName name names =
+  if member name names then
+    makeNewName (incrementName name) names
   else
     name
 
@@ -113,6 +103,15 @@ handleInt result =
   case result of
     Ok i -> i 
     Err _ -> 9
+
+incrementName : String -> String
+incrementName name =
+  slice 12 14 name
+  |>parseInt
+  |>handleInt
+  |>(+) 1
+  |>toString
+  |>append (slice 0 12 name)
 
 
 --      LIST MODIFICATION
@@ -134,48 +133,4 @@ toArrayDeep = map fromList >> fromList
 
 toListDeep : Array (Array String) -> List (List String)
 toListDeep = Array.map toList >> toList 
-
-
---         VIEW
-
-
-view : Model -> Html Msg
-view model =
-  div 
-  [ class "tracker-container" ]
-  [ header model
-  , body model
-  ]
-
-header : Model -> Html Msg
-header model =
-  div 
-  [ class "tracker-header" ] 
-  [ trackerHeader model
-  , columnNumbers model.sheet
-  ]
-
-body : Model -> Html Msg
-body model =
-  let {sheet, radix} = model in
-  toCells sheet
-  |>map (rowView sheet.name radix)
-  |>div [ class "tracker" ]
-
-
--- Tracker data formatting
-
-
-toCells : Sheet -> List Cells
-toCells {data, width, height} =
-  map2 (rowToCells width) data [ 0 .. height ]
-
-rowToCells : Int -> Row -> Int -> Cells
-rowToCells width r i =
-  map2 (columnToCell i) r [ 0 .. (width - 1) ]
-
-columnToCell : Index -> String -> Index -> Cell
-columnToCell ri content ci =
-  Cell ri ci content
-
 
