@@ -11,6 +11,12 @@ type alias Sheet =
   , name   : String
   }
 
+type alias SheetPayload =
+  { sheet : Sheet 
+  , directory : String
+  }
+
+
 type alias Index = Int
 type alias Row   = List String
 type alias Radix = Int

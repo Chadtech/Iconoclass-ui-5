@@ -18,6 +18,7 @@ initialModel =
       , ("middle", Tracker.initialModel)
       , ("right", Tracker.initialModel)
       ]
+  , directory = ""
   }
 
 

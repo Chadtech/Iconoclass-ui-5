@@ -86,7 +86,16 @@ update message model =
       |>update SyncTrackers
 
     SaveSheet sheet ->
-      (model, save sheet)
+      let
+        payload =
+          { sheet     = sheet
+          , directory = model.directory
+          }
+      in
+      (model, save payload)
+
+    SetDirectory directory ->
+      ({model | directory = directory}, Cmd.none)
 
     NoOp -> packModel model
 

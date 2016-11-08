@@ -7912,6 +7912,10 @@ var _user$project$Aliases$Sheet = F4(
 	function (a, b, c, d) {
 		return {data: a, width: b, height: c, name: d};
 	});
+var _user$project$Aliases$SheetPayload = F2(
+	function (a, b) {
+		return {sheet: a, directory: b};
+	});
 var _user$project$Aliases$Cell = F3(
 	function (a, b, c) {
 		return {ri: a, ci: b, content: c};
@@ -7993,11 +7997,14 @@ var _user$project$Dummies$blankSheet = {
 	name: 'blank-sheet'
 };
 
-var _user$project$Types$Model = F2(
-	function (a, b) {
-		return {sheets: a, trackerModels: b};
+var _user$project$Types$Model = F3(
+	function (a, b, c) {
+		return {sheets: a, directory: b, trackerModels: c};
 	});
 var _user$project$Types$NoOp = {ctor: 'NoOp'};
+var _user$project$Types$SetDirectory = function (a) {
+	return {ctor: 'SetDirectory', _0: a};
+};
 var _user$project$Types$SaveSheet = function (a) {
 	return {ctor: 'SaveSheet', _0: a};
 };
@@ -8032,7 +8039,8 @@ var _user$project$Init$initialModel = {
 				{ctor: '_Tuple2', _0: 'left', _1: _user$project$TrackerTypes$initialModel},
 				{ctor: '_Tuple2', _0: 'middle', _1: _user$project$TrackerTypes$initialModel},
 				{ctor: '_Tuple2', _0: 'right', _1: _user$project$TrackerTypes$initialModel}
-			]))
+			])),
+	directory: ''
 };
 
 var _user$project$Ports$focus = _elm_lang$core$Native_Platform.outgoingPort(
@@ -8044,18 +8052,22 @@ var _user$project$Ports$save = _elm_lang$core$Native_Platform.outgoingPort(
 	'save',
 	function (v) {
 		return {
-			data: _elm_lang$core$Native_List.toArray(v.data).map(
-				function (v) {
-					return _elm_lang$core$Native_List.toArray(v).map(
-						function (v) {
-							return v;
-						});
-				}),
-			width: v.width,
-			height: v.height,
-			name: v.name
+			sheet: {
+				data: _elm_lang$core$Native_List.toArray(v.sheet.data).map(
+					function (v) {
+						return _elm_lang$core$Native_List.toArray(v).map(
+							function (v) {
+								return v;
+							});
+					}),
+				width: v.sheet.width,
+				height: v.sheet.height,
+				name: v.sheet.name
+			},
+			directory: v.directory
 		};
 	});
+var _user$project$Ports$setDirectory = _elm_lang$core$Native_Platform.incomingPort('setDirectory', _elm_lang$core$Json_Decode$string);
 
 var _user$project$Util$trimZeros = function (str) {
 	trimZeros:
@@ -8984,10 +8996,19 @@ var _user$project$Update$update = F2(
 					model = _v11;
 					continue update;
 				case 'SaveSheet':
+					var payload = {sheet: _p4._0, directory: model.directory};
 					return {
 						ctor: '_Tuple2',
 						_0: model,
-						_1: _user$project$Ports$save(_p4._0)
+						_1: _user$project$Ports$save(payload)
+					};
+				case 'SetDirectory':
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{directory: _p4._0}),
+						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				default:
 					return _user$project$Update$packModel(model);
@@ -8996,7 +9017,11 @@ var _user$project$Update$update = F2(
 	});
 
 var _user$project$Main$subscriptions = function (model) {
-	return _elm_lang$core$Platform_Sub$none;
+	return _elm_lang$core$Platform_Sub$batch(
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$Ports$setDirectory(_user$project$Types$SetDirectory)
+			]));
 };
 var _user$project$Main$main = {
 	main: _elm_lang$html$Html_App$program(

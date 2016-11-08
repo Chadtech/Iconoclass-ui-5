@@ -13,10 +13,12 @@ type Msg
   | NewSheet String
   | RemoveSheet String
   | SaveSheet Sheet
+  | SetDirectory String
   | NoOp
 
 type alias Model =
   { sheets : Dict String Sheet 
+  , directory : String
   , trackerModels : Dict String Tracker.Model
   }
 

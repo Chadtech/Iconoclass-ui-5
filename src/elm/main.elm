@@ -17,8 +17,7 @@ main =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  Sub.none
-  --Sub.batch 
-  --[ 
+  Sub.batch 
+  [ setDirectory SetDirectory
 
-  --]
+  ]
