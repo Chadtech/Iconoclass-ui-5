@@ -40,6 +40,6 @@ save.subscribe (payload) ->
 
       writeFile filePath
   else
-      writeFile directory
+    writeFile directory
 
 

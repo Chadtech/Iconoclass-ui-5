@@ -8153,11 +8153,9 @@ var _user$project$TrackerComponents$columnView = F3(
 		var _p1 = _p0;
 		var _p3 = _p1.ri;
 		var _p2 = _p1.content;
-		var zeroClass = (!_elm_lang$core$Native_Utils.eq(
+		var subclass = _elm_lang$core$Native_Utils.eq(_p2, '') ? ((!_elm_lang$core$Native_Utils.eq(
 			A2(_elm_lang$core$Basics_ops['%'], _p3, radix),
-			0)) ? '' : ' zero-row';
-		var highlight = _elm_lang$core$Native_Utils.eq(_p2, '') ? '' : ' highlight';
-		var subclass = A2(_elm_lang$core$Basics_ops['++'], highlight, zeroClass);
+			0)) ? '' : ' zero-row') : ' highlight';
 		return A2(
 			_elm_lang$html$Html$div,
 			_elm_lang$core$Native_List.fromArray(
@@ -8172,7 +8170,7 @@ var _user$project$TrackerComponents$columnView = F3(
 					_elm_lang$core$Native_List.fromArray(
 						[
 							_elm_lang$html$Html_Attributes$class(
-							A2(_elm_lang$core$Basics_ops['++'], 'cell', subclass)),
+							A2(_elm_lang$core$Basics_ops['++'], 'cell ', subclass)),
 							_elm_lang$html$Html_Attributes$value(_p2),
 							_elm_lang$html$Html_Events$onInput(
 							A2(_user$project$TrackerTypes$UpdateCell, _p3, _p1.ci))

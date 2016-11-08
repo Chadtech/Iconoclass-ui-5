@@ -75,21 +75,17 @@ radixToString ri =
 columnView : Radix -> String -> Cell -> Html Msg
 columnView radix sheetName {ri, ci, content} =
   let
-    highlight = 
-      if content == "" then ""
-      else " highlight"
-
-    zeroClass =
-      if ri % radix /= 0 then ""
-      else " zero-row"
-
     subclass = 
-      highlight ++ zeroClass
+      if content == "" then 
+        if ri % radix /= 0 then ""
+        else
+          " zero-row"
+      else " highlight"
   in
   div
   [ class ("column" ++ subclass) ]
   [ input 
-    [ class ("cell" ++ subclass)
+    [ class ("cell " ++ subclass)
     , value content 
     , onInput (UpdateCell ri ci)
     ] 
