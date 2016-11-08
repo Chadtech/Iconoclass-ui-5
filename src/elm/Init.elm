@@ -14,9 +14,9 @@ initialModel =
       [ (blankSheet.name, blankSheet) ]
   , trackerModels =
       fromList
-      [ ("left", Tracker.initialModel) 
-      , ("middle", Tracker.initialModel)
-      , ("right", Tracker.initialModel)
+      [ ("left", Tracker.initialModel "left") 
+      , ("middle", Tracker.initialModel "middle")
+      , ("right", Tracker.initialModel "right")
       ]
   , directory = ""
   }

@@ -19,5 +19,5 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch 
   [ setDirectory SetDirectory
-
+  , openSheets OpenSheets
   ]

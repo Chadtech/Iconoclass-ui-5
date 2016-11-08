@@ -10,11 +10,12 @@ import Init             exposing (initialModel)
 import TrackerTypes
 import Tracker
 import Dict             exposing (Dict, map, get, insert, remove, keys, values)
-import List             exposing (head)
+import List             exposing (head, foldr)
 import Aliases          exposing (..)
 import Maybe            exposing (withDefault)
 import Dummies          exposing (dummyTracker, errorSheet, blankSheet)
 
+import Debug
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update message model =
@@ -44,7 +45,7 @@ update message model =
           remove oldName model.sheets
           |>insert sheet.name sheet
       , trackerModels = 
-          map (fixNames oldName sheet) model.trackerModels
+          map (fixTracker oldName sheet) model.trackerModels
       }
       |>update SyncTrackers
 
@@ -81,7 +82,7 @@ update message model =
               head (values newSheets)
               |>withDefault errorSheet
           in
-          map (fixNames name firstSheet) model.trackerModels
+          map (fixTracker name firstSheet) model.trackerModels
       }
       |>update SyncTrackers
 
@@ -94,15 +95,28 @@ update message model =
       in
       (model, save payload)
 
+    OpenDialog trackerName ->
+      (model, open trackerName)
+
+    OpenSheets sheets ->
+      { model
+      | sheets =
+          foldr insertSheet model.sheets sheets
+      }
+      |>update SyncTrackers
+
     SetDirectory directory ->
       ({model | directory = directory}, Cmd.none)
 
     NoOp -> packModel model
 
 
+insertSheet : Sheet -> Dict String Sheet -> Dict String Sheet
+insertSheet sheet sheets =
+  insert sheet.name sheet sheets
 
-fixNames : String -> Sheet -> String -> TrackerTypes.Model -> TrackerTypes.Model
-fixNames oldName sheet _ tracker =
+fixTracker : String -> Sheet -> String -> TrackerTypes.Model -> TrackerTypes.Model
+fixTracker oldName sheet _ tracker =
   if tracker.sheet.name == oldName then
     { tracker | sheet = sheet }
   else tracker

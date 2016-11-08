@@ -7934,19 +7934,23 @@ var _user$project$TrackerTypes$blankSheet = {
 	height: 256,
 	name: 'blank-sheet'
 };
-var _user$project$TrackerTypes$initialModel = {
-	radix: 16,
-	radixField: '16',
-	sheet: _user$project$TrackerTypes$blankSheet,
-	droppedDown: false,
-	otherSheets: _elm_lang$core$Native_List.fromArray(
-		['blank-sheet'])
+var _user$project$TrackerTypes$initialModel = function (name) {
+	return {
+		radix: 16,
+		radixField: '16',
+		sheet: _user$project$TrackerTypes$blankSheet,
+		droppedDown: false,
+		otherSheets: _elm_lang$core$Native_List.fromArray(
+			['blank-sheet']),
+		name: name
+	};
 };
-var _user$project$TrackerTypes$Model = F5(
-	function (a, b, c, d, e) {
-		return {radix: a, radixField: b, sheet: c, droppedDown: d, otherSheets: e};
+var _user$project$TrackerTypes$Model = F6(
+	function (a, b, c, d, e, f) {
+		return {radix: a, radixField: b, sheet: c, droppedDown: d, otherSheets: e, name: f};
 	});
 var _user$project$TrackerTypes$NoOp = {ctor: 'NoOp'};
+var _user$project$TrackerTypes$Open = {ctor: 'Open'};
 var _user$project$TrackerTypes$Save = {ctor: 'Save'};
 var _user$project$TrackerTypes$CloseSheet = {ctor: 'CloseSheet'};
 var _user$project$TrackerTypes$NewSheet = {ctor: 'NewSheet'};
@@ -7985,7 +7989,8 @@ var _user$project$Dummies$dummyTracker = {
 	sheet: _user$project$Dummies$errorSheet,
 	droppedDown: false,
 	otherSheets: _elm_lang$core$Native_List.fromArray(
-		['blank-sheet'])
+		['blank-sheet']),
+	name: 'DUMMIE'
 };
 var _user$project$Dummies$blankSheet = {
 	data: A2(
@@ -8002,6 +8007,12 @@ var _user$project$Types$Model = F3(
 		return {sheets: a, directory: b, trackerModels: c};
 	});
 var _user$project$Types$NoOp = {ctor: 'NoOp'};
+var _user$project$Types$OpenSheets = function (a) {
+	return {ctor: 'OpenSheets', _0: a};
+};
+var _user$project$Types$OpenDialog = function (a) {
+	return {ctor: 'OpenDialog', _0: a};
+};
 var _user$project$Types$SetDirectory = function (a) {
 	return {ctor: 'SetDirectory', _0: a};
 };
@@ -8036,9 +8047,21 @@ var _user$project$Init$initialModel = {
 	trackerModels: _elm_lang$core$Dict$fromList(
 		_elm_lang$core$Native_List.fromArray(
 			[
-				{ctor: '_Tuple2', _0: 'left', _1: _user$project$TrackerTypes$initialModel},
-				{ctor: '_Tuple2', _0: 'middle', _1: _user$project$TrackerTypes$initialModel},
-				{ctor: '_Tuple2', _0: 'right', _1: _user$project$TrackerTypes$initialModel}
+				{
+				ctor: '_Tuple2',
+				_0: 'left',
+				_1: _user$project$TrackerTypes$initialModel('left')
+			},
+				{
+				ctor: '_Tuple2',
+				_0: 'middle',
+				_1: _user$project$TrackerTypes$initialModel('middle')
+			},
+				{
+				ctor: '_Tuple2',
+				_0: 'right',
+				_1: _user$project$TrackerTypes$initialModel('right')
+			}
 			])),
 	directory: ''
 };
@@ -8067,7 +8090,41 @@ var _user$project$Ports$save = _elm_lang$core$Native_Platform.outgoingPort(
 			directory: v.directory
 		};
 	});
+var _user$project$Ports$open = _elm_lang$core$Native_Platform.outgoingPort(
+	'open',
+	function (v) {
+		return v;
+	});
 var _user$project$Ports$setDirectory = _elm_lang$core$Native_Platform.incomingPort('setDirectory', _elm_lang$core$Json_Decode$string);
+var _user$project$Ports$openSheets = _elm_lang$core$Native_Platform.incomingPort(
+	'openSheets',
+	_elm_lang$core$Json_Decode$list(
+		A2(
+			_elm_lang$core$Json_Decode$andThen,
+			A2(
+				_elm_lang$core$Json_Decode_ops[':='],
+				'data',
+				_elm_lang$core$Json_Decode$list(
+					_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$string))),
+			function (data) {
+				return A2(
+					_elm_lang$core$Json_Decode$andThen,
+					A2(_elm_lang$core$Json_Decode_ops[':='], 'width', _elm_lang$core$Json_Decode$int),
+					function (width) {
+						return A2(
+							_elm_lang$core$Json_Decode$andThen,
+							A2(_elm_lang$core$Json_Decode_ops[':='], 'height', _elm_lang$core$Json_Decode$int),
+							function (height) {
+								return A2(
+									_elm_lang$core$Json_Decode$andThen,
+									A2(_elm_lang$core$Json_Decode_ops[':='], 'name', _elm_lang$core$Json_Decode$string),
+									function (name) {
+										return _elm_lang$core$Json_Decode$succeed(
+											{data: data, width: width, height: height, name: name});
+									});
+							});
+					});
+			})));
 
 var _user$project$Util$trimZeros = function (str) {
 	trimZeros:
@@ -8422,7 +8479,7 @@ var _user$project$TrackerHeader$view = function (tracker) {
 				A2(
 				_user$project$TrackerHeader$button,
 				'open',
-				_elm_lang$html$Html_Events$onClick(_user$project$TrackerTypes$NoOp)),
+				_elm_lang$html$Html_Events$onClick(_user$project$TrackerTypes$Open)),
 				A2(
 				_user$project$TrackerHeader$button,
 				'save',
@@ -8850,6 +8907,12 @@ var _user$project$Tracker$update = F2(
 					_0: model,
 					_1: _user$project$Types$SaveSheet(model.sheet)
 				};
+			case 'Open':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$Types$OpenDialog(model.name)
+				};
 			default:
 				return _user$project$Tracker$packModel(model);
 		}
@@ -8881,11 +8944,15 @@ var _user$project$Update$syncTracker = F3(
 				otherSheets: _elm_lang$core$Dict$keys(sheets)
 			});
 	});
-var _user$project$Update$fixNames = F4(
+var _user$project$Update$fixTracker = F4(
 	function (oldName, sheet, _p3, tracker) {
 		return _elm_lang$core$Native_Utils.eq(tracker.sheet.name, oldName) ? _elm_lang$core$Native_Utils.update(
 			tracker,
 			{sheet: sheet}) : tracker;
+	});
+var _user$project$Update$insertSheet = F2(
+	function (sheet, sheets) {
+		return A3(_elm_lang$core$Dict$insert, sheet.name, sheet, sheets);
 	});
 var _user$project$Update$update = F2(
 	function (message, model) {
@@ -8934,7 +9001,7 @@ var _user$project$Update$update = F2(
 								A2(_elm_lang$core$Dict$remove, _p9, model.sheets)),
 							trackerModels: A2(
 								_elm_lang$core$Dict$map,
-								A2(_user$project$Update$fixNames, _p9, _p10),
+								A2(_user$project$Update$fixTracker, _p9, _p10),
 								model.trackerModels)
 						});
 					message = _v6;
@@ -8986,7 +9053,7 @@ var _user$project$Update$update = F2(
 										_elm_lang$core$Dict$values(newSheets)));
 								return A2(
 									_elm_lang$core$Dict$map,
-									A2(_user$project$Update$fixNames, _p14, firstSheet),
+									A2(_user$project$Update$fixTracker, _p14, firstSheet),
 									model.trackerModels);
 							}()
 						});
@@ -9000,6 +9067,22 @@ var _user$project$Update$update = F2(
 						_0: model,
 						_1: _user$project$Ports$save(payload)
 					};
+				case 'OpenDialog':
+					return {
+						ctor: '_Tuple2',
+						_0: model,
+						_1: _user$project$Ports$open(_p4._0)
+					};
+				case 'OpenSheets':
+					var _v12 = _user$project$Types$SyncTrackers,
+						_v13 = _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							sheets: A3(_elm_lang$core$List$foldr, _user$project$Update$insertSheet, model.sheets, _p4._0)
+						});
+					message = _v12;
+					model = _v13;
+					continue update;
 				case 'SetDirectory':
 					return {
 						ctor: '_Tuple2',
@@ -9018,7 +9101,8 @@ var _user$project$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$batch(
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_user$project$Ports$setDirectory(_user$project$Types$SetDirectory)
+				_user$project$Ports$setDirectory(_user$project$Types$SetDirectory),
+				_user$project$Ports$openSheets(_user$project$Types$OpenSheets)
 			]));
 };
 var _user$project$Main$main = {

@@ -16,7 +16,6 @@ type alias SheetPayload =
   , directory : String
   }
 
-
 type alias Index = Int
 type alias Row   = List String
 type alias Radix = Int

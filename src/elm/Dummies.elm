@@ -29,6 +29,7 @@ dummyTracker =
   , sheet       = errorSheet
   , droppedDown = False
   , otherSheets = [ "blank-sheet" ]
+  , name        = "DUMMIE"
   }
 
 dummyRow : Int -> Array String

@@ -14,6 +14,8 @@ type Msg
   | RemoveSheet String
   | SaveSheet Sheet
   | SetDirectory String
+  | OpenDialog String
+  | OpenSheets (List Sheet)
   | NoOp
 
 type alias Model =

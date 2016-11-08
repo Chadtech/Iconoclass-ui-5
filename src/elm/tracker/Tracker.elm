@@ -90,6 +90,9 @@ update message model =
     Save ->
       (model, Types.SaveSheet model.sheet)
 
+    Open ->
+      (model, Types.OpenDialog model.name)
+
     NoOp ->
       packModel model
 

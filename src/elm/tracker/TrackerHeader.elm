@@ -39,7 +39,7 @@ view tracker =
       []
     ]
   , button "new" (onClick NewSheet)
-  , button "open" (onClick NoOp)
+  , button "open" (onClick Open)
   , button "save" (onClick Save)
   , button "close" (onClick CloseSheet)
   , dropdown tracker

@@ -9,15 +9,17 @@ type alias Model =
   , sheet       : Sheet
   , droppedDown : Bool
   , otherSheets : List String
+  , name        : String
   }
 
-initialModel : Model
-initialModel = 
+initialModel : String -> Model
+initialModel name = 
   { radix       = 16
   , radixField  = "16"
   , sheet       = blankSheet
   , droppedDown = False
   , otherSheets = [ "blank-sheet" ]
+  , name        = name
   }
 
 blankSheet : Sheet
@@ -37,4 +39,5 @@ type Msg
   | NewSheet
   | CloseSheet
   | Save
+  | Open
   | NoOp
