@@ -94,29 +94,41 @@ update message model =
       (model, Types.OpenDialog model.name)
 
     ColumnIndexMouseOver index ->
-      (,)
+      packModel
       { model 
       | columns = 
-          set 
-            index 
-            { show = True, index = index }
-            (fromList model.columns)
+          fromList model.columns
+          |>set index True
           |>toList
       }
-      Types.SyncTrackers
-
+      
     ColumnIndexMouseOut index ->
-      (,)
+      packModel
       { model 
       | columns = 
-          set 
-            index 
-            { show = False, index = index }
-            (fromList model.columns)
+          fromList model.columns
+          |>set index False
           |>toList
       }
-      Types.SyncTrackers
-    
+
+    RowIndexMouseOver index ->
+      packModel
+      { model
+      | rows = 
+          fromList model.rows
+          |>set index True
+          |>toList
+      }
+
+    RowIndexMouseOut index ->
+      packModel
+      { model
+      | rows = 
+          fromList model.rows
+          |>set index False
+          |>toList
+      }
+      
     NoOp ->
       packModel model
 

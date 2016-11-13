@@ -8,7 +8,7 @@ import TrackerTypes     exposing (..)
 import Maybe            exposing (withDefault, Maybe)
 import Util             exposing (numberToHexString, trimZeros)
 import Dict             exposing (Dict, get)
-import List             exposing (map, length, head)
+import List             exposing (map, map2, length, head)
 import Array            exposing (fromList)
 import Dummies          exposing (dummyCell)
 
@@ -22,9 +22,11 @@ column = div [ class "column" ]
 columnClean : List (Html Msg) -> Html Msg
 columnClean = div [ class "column clean" ]
 
-columnNumbers : List ColumnModel -> Html Msg
+columnNumbers : List Bool -> Html Msg
 columnNumbers columns =
-  map columnIndexView columns
+  let indices = [ 0 .. 8 ] in
+  map2 (,) columns [ 0 .. 8 ]
+  |>map columnIndexView
   |>(::) (div [ class "column index" ] [])
   |>div [ class "row" ]
 
@@ -32,32 +34,70 @@ columnNumbers columns =
 --          ROW
 
 
-rowView : Radix -> Cells -> Html Msg
-rowView r columns =
-  let i' = formatRowIndex r columns in
+rowView : Radix -> (Bool, Cells) -> Html Msg
+rowView r (showDropDown, columns) =
   map (columnView r) columns
-  |>(::) (rowIndexView i')
+  |>(::) (rowIndexView r showDropDown columns)
   |>div [ class "row" ]
 
-rowIndexView : String -> Html Msg
-rowIndexView indexString =
+rowIndexView : Radix -> Bool -> Cells -> Html Msg
+rowIndexView radix show cells =
+  let
+
+    (index, iStr) = 
+      formatRowIndex radix cells
+
+    child = 
+      if show then
+        div
+        [ class "drop-down narrow" ]
+        [ rowOptions ]
+      else
+      p
+      [ class "index-cell" ]
+      [ text iStr ]
+
+    subclass =
+      if show then "clean"
+      else "index"
+
+  in
   div
-  [ class "column index" ]
-  [ p
-    [ class "index-cell" ]
-    [ text indexString ]
+  [ class ("column " ++ subclass) 
+  , onMouseOver (RowIndexMouseOver index)
+  , onMouseOut (RowIndexMouseOut index)
+  ]
+  [ child ]
+
+rowOptions : Html Msg
+rowOptions =
+  div
+  [ class "column-options" ]
+  [ input 
+    [ class "column-button close"
+    , type' "submit"
+    , value "x"
+    ]
+    []
+  , input 
+    [ class "column-button"
+    , type' "submit"
+    , value "v"
+    ]
+    []
   ]
 
 
 --        ROW FORMATTING
 
 
-formatRowIndex : Radix -> Cells -> String
+formatRowIndex : Radix -> Cells -> (Int, String)
 formatRowIndex r row =
   let n = getRowIndex row in
   radixToString (n % r)
   |>(++) (toString (n // r))
   |>trimZeros
+  |>(,) n
 
 getRowIndex : Cells -> Index
 getRowIndex =
@@ -92,25 +132,22 @@ columnView radix {ri, ci, content} =
     [] 
   ]
 
-columnIndexView : ColumnModel -> Html Msg
-columnIndexView {index, show} =
+columnIndexView : (Bool, Int) -> Html Msg
+columnIndexView (show, index) =
   let
     child = 
       if show then
         div
         [ class "drop-down narrow" ]
-        [ columnOptions
-        ]
+        [ columnOptions ]
       else
         p 
         [ class "index-cell" ]
         [ text (toString index) ] 
 
     subclass =
-      if show then
-        "clean"
-      else
-        "index"
+      if show then "clean"
+      else "index"
 
   in
   div

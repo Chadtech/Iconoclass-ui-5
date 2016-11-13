@@ -32,8 +32,9 @@ header model =
 
 body : Model -> Html Msg
 body model =
-  let {sheet, radix} = model in
+  let {sheet, radix, rows} = model in
   toCells sheet
+  |>map2 (,) rows
   |>map (rowView radix)
   |>div [ class "tracker" ]
 

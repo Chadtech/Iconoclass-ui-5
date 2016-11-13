@@ -10,8 +10,8 @@ type alias Model =
   , droppedDown : Bool
   , otherSheets : List String
   , name        : String
-  , rows        : List RowModel
-  , columns     : List ColumnModel
+  , rows        : List Bool
+  , columns     : List Bool
   }
 
 type alias RowModel =
@@ -32,20 +32,8 @@ initialModel name =
   , droppedDown = False
   , otherSheets = [ "blank-sheet" ]
   , name        = name
-  , rows        = map initRow [ 0 .. 255 ]
-  , columns     = map initColumn [ 0 .. 8 ]
-  }
-
-initRow : Int -> RowModel
-initRow index =
-  { show  = False
-  , index = index
-  }
-
-initColumn : Int -> ColumnModel
-initColumn index =
-  { show  = False
-  , index = index
+  , rows        = repeat 256 False
+  , columns     = repeat 9 False
   }
 
 blankSheet : Sheet
@@ -68,4 +56,6 @@ type Msg
   | Open
   | ColumnIndexMouseOver Int
   | ColumnIndexMouseOut Int
+  | RowIndexMouseOver Int
+  | RowIndexMouseOut Int
   | NoOp
