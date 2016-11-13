@@ -93,6 +93,30 @@ update message model =
     Open ->
       (model, Types.OpenDialog model.name)
 
+    ColumnIndexMouseOver index ->
+      (,)
+      { model 
+      | columns = 
+          set 
+            index 
+            { show = True, index = index }
+            (fromList model.columns)
+          |>toList
+      }
+      Types.SyncTrackers
+
+    ColumnIndexMouseOut index ->
+      (,)
+      { model 
+      | columns = 
+          set 
+            index 
+            { show = False, index = index }
+            (fromList model.columns)
+          |>toList
+      }
+      Types.SyncTrackers
+    
     NoOp ->
       packModel model
 

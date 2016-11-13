@@ -38,10 +38,10 @@ view tracker =
       ]
       []
     ]
-  , button "new" (onClick NewSheet)
-  , button "open" (onClick Open)
-  , button "save" (onClick Save)
-  , button "close" (onClick CloseSheet)
+  , button "new" NewSheet
+  , button "open" Open
+  , button "save" Save
+  , button "close" CloseSheet
   , dropdown tracker
   ]
 
@@ -49,14 +49,14 @@ view tracker =
 --        BUTTON
 
 
-button : String -> Attribute Msg -> Html Msg
-button label clickAction =
+button : String -> Msg -> Html Msg
+button label msg =
   columnClean
   [ input 
     [ class "button" 
     , type' "submit"
     , value label
-    , clickAction
+    , onClick msg
     ]
     []
   ]

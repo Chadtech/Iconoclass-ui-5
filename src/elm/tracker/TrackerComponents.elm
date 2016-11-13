@@ -22,9 +22,9 @@ column = div [ class "column" ]
 columnClean : List (Html Msg) -> Html Msg
 columnClean = div [ class "column clean" ]
 
-columnNumbers : Sheet -> Html Msg
-columnNumbers {width} =
-  map columnIndexView [ 0 .. (width - 1) ]
+columnNumbers : List ColumnModel -> Html Msg
+columnNumbers columns =
+  map columnIndexView columns
   |>(::) (div [ class "column index" ] [])
   |>div [ class "row" ]
 
@@ -32,10 +32,10 @@ columnNumbers {width} =
 --          ROW
 
 
-rowView : String -> Radix -> Cells -> Html Msg
-rowView sheetName r columns =
+rowView : Radix -> Cells -> Html Msg
+rowView r columns =
   let i' = formatRowIndex r columns in
-  map (columnView r sheetName) columns
+  map (columnView r) columns
   |>(::) (rowIndexView i')
   |>div [ class "row" ]
 
@@ -72,8 +72,8 @@ radixToString ri =
 --          COLUMN
 
 
-columnView : Radix -> String -> Cell -> Html Msg
-columnView radix sheetName {ri, ci, content} =
+columnView : Radix -> Cell -> Html Msg
+columnView radix {ri, ci, content} =
   let
     subclass = 
       if content == "" then 
@@ -92,11 +92,51 @@ columnView radix sheetName {ri, ci, content} =
     [] 
   ]
 
-columnIndexView : Int -> Html Msg
-columnIndexView i =
+columnIndexView : ColumnModel -> Html Msg
+columnIndexView {index, show} =
+  let
+    child = 
+      if show then
+        div
+        [ class "drop-down narrow" ]
+        [ columnOptions
+        ]
+      else
+        p 
+        [ class "index-cell" ]
+        [ text (toString index) ] 
+
+    subclass =
+      if show then
+        "clean"
+      else
+        "index"
+
+  in
   div
-  [ class "column index" ]
-  [ p 
-    [ class "index-cell" ]
-    [ text (toString i) ] 
+  [ class ("column " ++ subclass) 
+  , onMouseOver (ColumnIndexMouseOver index)
+  , onMouseOut (ColumnIndexMouseOut index)
   ]
+  [ child ]
+
+columnOptions : Html Msg
+columnOptions =
+  div
+  [ class "column-options" ]
+  [ input 
+    [ class "column-button close"
+    , type' "submit"
+    , value "x"
+    ]
+    []
+  , input 
+    [ class "column-button"
+    , type' "submit"
+    , value ">"
+    ]
+    []
+  ]
+
+
+

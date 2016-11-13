@@ -27,14 +27,14 @@ header model =
   div 
   [ class "tracker-header" ] 
   [ TrackerHeader.view model
-  , columnNumbers model.sheet
+  , columnNumbers model.columns
   ]
 
 body : Model -> Html Msg
 body model =
   let {sheet, radix} = model in
   toCells sheet
-  |>map (rowView sheet.name radix)
+  |>map (rowView radix)
   |>div [ class "tracker" ]
 
 

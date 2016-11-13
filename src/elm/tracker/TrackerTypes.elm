@@ -15,13 +15,13 @@ type alias Model =
   }
 
 type alias RowModel =
-  { droppedDown : Bool 
-  , index       : Int
+  { show : Bool 
+  , index        : Int
   }
 
 type alias ColumnModel =
-  { droppedRight : Bool
-  , index        : Int
+  { show  : Bool
+  , index : Int
   }
 
 initialModel : String -> Model
@@ -32,20 +32,20 @@ initialModel name =
   , droppedDown = False
   , otherSheets = [ "blank-sheet" ]
   , name        = name
-  , rows        = map initRow [ 0 .. 8 ]
-  , columns     = map initColumn [ 0 .. 255 ]
+  , rows        = map initRow [ 0 .. 255 ]
+  , columns     = map initColumn [ 0 .. 8 ]
   }
 
 initRow : Int -> RowModel
 initRow index =
-  { droppedDown = False
-  , index       = index
+  { show  = False
+  , index = index
   }
 
 initColumn : Int -> ColumnModel
 initColumn index =
-  { droppedRight = False
-  , index        = index
+  { show  = False
+  , index = index
   }
 
 blankSheet : Sheet
@@ -66,4 +66,6 @@ type Msg
   | CloseSheet
   | Save
   | Open
+  | ColumnIndexMouseOver Int
+  | ColumnIndexMouseOut Int
   | NoOp

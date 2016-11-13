@@ -7935,10 +7935,10 @@ var _user$project$TrackerTypes$blankSheet = {
 	name: 'blank-sheet'
 };
 var _user$project$TrackerTypes$initColumn = function (index) {
-	return {droppedRight: false, index: index};
+	return {show: false, index: index};
 };
 var _user$project$TrackerTypes$initRow = function (index) {
-	return {droppedDown: false, index: index};
+	return {show: false, index: index};
 };
 var _user$project$TrackerTypes$initialModel = function (name) {
 	return {
@@ -7952,11 +7952,11 @@ var _user$project$TrackerTypes$initialModel = function (name) {
 		rows: A2(
 			_elm_lang$core$List$map,
 			_user$project$TrackerTypes$initRow,
-			_elm_lang$core$Native_List.range(0, 8)),
+			_elm_lang$core$Native_List.range(0, 255)),
 		columns: A2(
 			_elm_lang$core$List$map,
 			_user$project$TrackerTypes$initColumn,
-			_elm_lang$core$Native_List.range(0, 255))
+			_elm_lang$core$Native_List.range(0, 8))
 	};
 };
 var _user$project$TrackerTypes$Model = F8(
@@ -7965,13 +7965,19 @@ var _user$project$TrackerTypes$Model = F8(
 	});
 var _user$project$TrackerTypes$RowModel = F2(
 	function (a, b) {
-		return {droppedDown: a, index: b};
+		return {show: a, index: b};
 	});
 var _user$project$TrackerTypes$ColumnModel = F2(
 	function (a, b) {
-		return {droppedRight: a, index: b};
+		return {show: a, index: b};
 	});
 var _user$project$TrackerTypes$NoOp = {ctor: 'NoOp'};
+var _user$project$TrackerTypes$ColumnIndexMouseOut = function (a) {
+	return {ctor: 'ColumnIndexMouseOut', _0: a};
+};
+var _user$project$TrackerTypes$ColumnIndexMouseOver = function (a) {
+	return {ctor: 'ColumnIndexMouseOver', _0: a};
+};
 var _user$project$TrackerTypes$Open = {ctor: 'Open'};
 var _user$project$TrackerTypes$Save = {ctor: 'Save'};
 var _user$project$TrackerTypes$CloseSheet = {ctor: 'CloseSheet'};
@@ -8213,35 +8219,79 @@ var _user$project$Util$numberToHexString = _elm_lang$core$Dict$fromList(
 			{ctor: '_Tuple2', _0: 23, _1: 'n'}
 		]));
 
-var _user$project$TrackerComponents$columnIndexView = function (i) {
+var _user$project$TrackerComponents$columnOptions = A2(
+	_elm_lang$html$Html$div,
+	_elm_lang$core$Native_List.fromArray(
+		[
+			_elm_lang$html$Html_Attributes$class('column-options')
+		]),
+	_elm_lang$core$Native_List.fromArray(
+		[
+			A2(
+			_elm_lang$html$Html$input,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html_Attributes$class('column-button close'),
+					_elm_lang$html$Html_Attributes$type$('submit'),
+					_elm_lang$html$Html_Attributes$value('x')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[])),
+			A2(
+			_elm_lang$html$Html$input,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html_Attributes$class('column-button'),
+					_elm_lang$html$Html_Attributes$type$('submit'),
+					_elm_lang$html$Html_Attributes$value('>')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[]))
+		]));
+var _user$project$TrackerComponents$columnIndexView = function (_p0) {
+	var _p1 = _p0;
+	var _p3 = _p1.show;
+	var _p2 = _p1.index;
+	var subclass = _p3 ? 'clean' : 'index';
+	var child = _p3 ? A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('drop-down narrow')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[_user$project$TrackerComponents$columnOptions])) : A2(
+		_elm_lang$html$Html$p,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('index-cell')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text(
+				_elm_lang$core$Basics$toString(_p2))
+			]));
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$html$Html_Attributes$class('column index')
+				_elm_lang$html$Html_Attributes$class(
+				A2(_elm_lang$core$Basics_ops['++'], 'column ', subclass)),
+				_elm_lang$html$Html_Events$onMouseOver(
+				_user$project$TrackerTypes$ColumnIndexMouseOver(_p2)),
+				_elm_lang$html$Html_Events$onMouseOut(
+				_user$project$TrackerTypes$ColumnIndexMouseOut(_p2))
 			]),
 		_elm_lang$core$Native_List.fromArray(
-			[
-				A2(
-				_elm_lang$html$Html$p,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('index-cell')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text(
-						_elm_lang$core$Basics$toString(i))
-					]))
-			]));
+			[child]));
 };
-var _user$project$TrackerComponents$columnView = F3(
-	function (radix, sheetName, _p0) {
-		var _p1 = _p0;
-		var _p3 = _p1.ri;
-		var _p2 = _p1.content;
-		var subclass = _elm_lang$core$Native_Utils.eq(_p2, '') ? ((!_elm_lang$core$Native_Utils.eq(
-			A2(_elm_lang$core$Basics_ops['%'], _p3, radix),
+var _user$project$TrackerComponents$columnView = F2(
+	function (radix, _p4) {
+		var _p5 = _p4;
+		var _p7 = _p5.ri;
+		var _p6 = _p5.content;
+		var subclass = _elm_lang$core$Native_Utils.eq(_p6, '') ? ((!_elm_lang$core$Native_Utils.eq(
+			A2(_elm_lang$core$Basics_ops['%'], _p7, radix),
 			0)) ? '' : ' zero-row') : ' highlight';
 		return A2(
 			_elm_lang$html$Html$div,
@@ -8258,9 +8308,9 @@ var _user$project$TrackerComponents$columnView = F3(
 						[
 							_elm_lang$html$Html_Attributes$class(
 							A2(_elm_lang$core$Basics_ops['++'], 'cell ', subclass)),
-							_elm_lang$html$Html_Attributes$value(_p2),
+							_elm_lang$html$Html_Attributes$value(_p6),
 							_elm_lang$html$Html_Events$onInput(
-							A2(_user$project$TrackerTypes$UpdateCell, _p3, _p1.ci))
+							A2(_user$project$TrackerTypes$UpdateCell, _p7, _p5.ci))
 						]),
 					_elm_lang$core$Native_List.fromArray(
 						[]))
@@ -8272,12 +8322,12 @@ var _user$project$TrackerComponents$radixToString = function (ri) {
 		'z',
 		A2(_elm_lang$core$Dict$get, ri, _user$project$Util$numberToHexString));
 };
-var _user$project$TrackerComponents$getRowIndex = function (_p4) {
+var _user$project$TrackerComponents$getRowIndex = function (_p8) {
 	return function (_) {
 		return _.ri;
 	}(
 		_user$project$Dummies$dummyCell(
-			_elm_lang$core$List$head(_p4)));
+			_elm_lang$core$List$head(_p8)));
 };
 var _user$project$TrackerComponents$formatRowIndex = F2(
 	function (r, row) {
@@ -8313,8 +8363,8 @@ var _user$project$TrackerComponents$rowIndexView = function (indexString) {
 					]))
 			]));
 };
-var _user$project$TrackerComponents$rowView = F3(
-	function (sheetName, r, columns) {
+var _user$project$TrackerComponents$rowView = F2(
+	function (r, columns) {
 		var i$ = A2(_user$project$TrackerComponents$formatRowIndex, r, columns);
 		return A2(
 			_elm_lang$html$Html$div,
@@ -8330,11 +8380,10 @@ var _user$project$TrackerComponents$rowView = F3(
 				_user$project$TrackerComponents$rowIndexView(i$),
 				A2(
 					_elm_lang$core$List$map,
-					A2(_user$project$TrackerComponents$columnView, r, sheetName),
+					_user$project$TrackerComponents$columnView(r),
 					columns)));
 	});
-var _user$project$TrackerComponents$columnNumbers = function (_p5) {
-	var _p6 = _p5;
+var _user$project$TrackerComponents$columnNumbers = function (columns) {
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -8354,10 +8403,7 @@ var _user$project$TrackerComponents$columnNumbers = function (_p5) {
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[])),
-			A2(
-				_elm_lang$core$List$map,
-				_user$project$TrackerComponents$columnIndexView,
-				_elm_lang$core$Native_List.range(0, _p6.width - 1))));
+			A2(_elm_lang$core$List$map, _user$project$TrackerComponents$columnIndexView, columns)));
 };
 var _user$project$TrackerComponents$columnClean = _elm_lang$html$Html$div(
 	_elm_lang$core$Native_List.fromArray(
@@ -8429,7 +8475,7 @@ var _user$project$TrackerHeader$dropdown = function (tracker) {
 			[body]));
 };
 var _user$project$TrackerHeader$button = F2(
-	function (label, clickAction) {
+	function (label, msg) {
 		return _user$project$TrackerComponents$columnClean(
 			_elm_lang$core$Native_List.fromArray(
 				[
@@ -8440,7 +8486,7 @@ var _user$project$TrackerHeader$button = F2(
 							_elm_lang$html$Html_Attributes$class('button'),
 							_elm_lang$html$Html_Attributes$type$('submit'),
 							_elm_lang$html$Html_Attributes$value(label),
-							clickAction
+							_elm_lang$html$Html_Events$onClick(msg)
 						]),
 					_elm_lang$core$Native_List.fromArray(
 						[]))
@@ -8502,22 +8548,10 @@ var _user$project$TrackerHeader$view = function (tracker) {
 						_elm_lang$core$Native_List.fromArray(
 							[]))
 					])),
-				A2(
-				_user$project$TrackerHeader$button,
-				'new',
-				_elm_lang$html$Html_Events$onClick(_user$project$TrackerTypes$NewSheet)),
-				A2(
-				_user$project$TrackerHeader$button,
-				'open',
-				_elm_lang$html$Html_Events$onClick(_user$project$TrackerTypes$Open)),
-				A2(
-				_user$project$TrackerHeader$button,
-				'save',
-				_elm_lang$html$Html_Events$onClick(_user$project$TrackerTypes$Save)),
-				A2(
-				_user$project$TrackerHeader$button,
-				'close',
-				_elm_lang$html$Html_Events$onClick(_user$project$TrackerTypes$CloseSheet)),
+				A2(_user$project$TrackerHeader$button, 'new', _user$project$TrackerTypes$NewSheet),
+				A2(_user$project$TrackerHeader$button, 'open', _user$project$TrackerTypes$Open),
+				A2(_user$project$TrackerHeader$button, 'save', _user$project$TrackerTypes$Save),
+				A2(_user$project$TrackerHeader$button, 'close', _user$project$TrackerTypes$CloseSheet),
 				_user$project$TrackerHeader$dropdown(tracker)
 			]));
 };
@@ -8554,7 +8588,7 @@ var _user$project$TrackerView$body = function (model) {
 			]),
 		A2(
 			_elm_lang$core$List$map,
-			A2(_user$project$TrackerComponents$rowView, sheet.name, radix),
+			_user$project$TrackerComponents$rowView(radix),
 			_user$project$TrackerView$toCells(sheet)));
 };
 var _user$project$TrackerView$header = function (model) {
@@ -8567,7 +8601,7 @@ var _user$project$TrackerView$header = function (model) {
 		_elm_lang$core$Native_List.fromArray(
 			[
 				_user$project$TrackerHeader$view(model),
-				_user$project$TrackerComponents$columnNumbers(model.sheet)
+				_user$project$TrackerComponents$columnNumbers(model.columns)
 			]));
 };
 var _user$project$TrackerView$view = function (model) {
@@ -8943,6 +8977,42 @@ var _user$project$Tracker$update = F2(
 					_0: model,
 					_1: _user$project$Types$OpenDialog(model.name)
 				};
+			case 'ColumnIndexMouseOver':
+				var _p12 = _p3._0;
+				return A2(
+					F2(
+						function (v0, v1) {
+							return {ctor: '_Tuple2', _0: v0, _1: v1};
+						}),
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							columns: _elm_lang$core$Array$toList(
+								A3(
+									_elm_lang$core$Array$set,
+									_p12,
+									{show: true, index: _p12},
+									_elm_lang$core$Array$fromList(model.columns)))
+						}),
+					_user$project$Types$SyncTrackers);
+			case 'ColumnIndexMouseOut':
+				var _p13 = _p3._0;
+				return A2(
+					F2(
+						function (v0, v1) {
+							return {ctor: '_Tuple2', _0: v0, _1: v1};
+						}),
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							columns: _elm_lang$core$Array$toList(
+								A3(
+									_elm_lang$core$Array$set,
+									_p13,
+									{show: false, index: _p13},
+									_elm_lang$core$Array$fromList(model.columns)))
+						}),
+					_user$project$Types$SyncTrackers);
 			default:
 				return _user$project$Tracker$packModel(model);
 		}

@@ -87,13 +87,45 @@ body
   position fixed
   z-index 9
   background veryVeryIgnorable
+  &.narrow
+    width 40px
 
 .drop-down-option
   width 82px
   height 13px
+  z-index 9 
   border 1px veryIgnorable solid
+  &.narrow
+    width 40px
   &:hover
     border 1px pointColor solid
+    
+.column-button
+  height 15px
+  width 21px
+  background ignorable
+  border-left 1px pointColor solid
+  border-top 1px pointColor solid
+  border-right 1px veryIgnorable solid
+  border-bottom 1px veryIgnorable solid
+  outline none
+  font-family HFTIN
+  font-size 1em
+  color actualBlack
+  font-smooth none
+  -webkit-font-smoothing none 
+  cursor pointer
+  &:hover
+    color pointColor
+  &:active
+    border-left 1px veryIgnorable solid
+    border-top 1px veryIgnorable solid
+    border-right 1px pointColor solid
+    border-bottom 1px pointColor solid
+  &.close
+    width 20px
+    margin-right 1px
+
 
 .point
   margin 0
