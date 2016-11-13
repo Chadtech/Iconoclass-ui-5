@@ -1,7 +1,7 @@
 module TrackerTypes exposing (..)
 
 import Aliases exposing (..)
-import List exposing (repeat)
+import List exposing (repeat, map)
 
 type alias Model =
   { radix       : Int
@@ -10,6 +10,18 @@ type alias Model =
   , droppedDown : Bool
   , otherSheets : List String
   , name        : String
+  , rows        : List RowModel
+  , columns     : List ColumnModel
+  }
+
+type alias RowModel =
+  { droppedDown : Bool 
+  , index       : Int
+  }
+
+type alias ColumnModel =
+  { droppedRight : Bool
+  , index        : Int
   }
 
 initialModel : String -> Model
@@ -20,6 +32,20 @@ initialModel name =
   , droppedDown = False
   , otherSheets = [ "blank-sheet" ]
   , name        = name
+  , rows        = map initRow [ 0 .. 8 ]
+  , columns     = map initColumn [ 0 .. 255 ]
+  }
+
+initRow : Int -> RowModel
+initRow index =
+  { droppedDown = False
+  , index       = index
+  }
+
+initColumn : Int -> ColumnModel
+initColumn index =
+  { droppedRight = False
+  , index        = index
   }
 
 blankSheet : Sheet

@@ -35,9 +35,9 @@ open.subscribe (trackerName) ->
 
       data = _.map csv, (col) -> col.split ','
 
-      data: data 
-      name: justFileName filePath
-      width: data[0].length
+      data:   data 
+      name:   justFileName filePath
+      width:  data[0].length
       height: data.length
 
     app.ports.openSheets.send sheets

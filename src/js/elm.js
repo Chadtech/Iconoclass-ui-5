@@ -7934,6 +7934,12 @@ var _user$project$TrackerTypes$blankSheet = {
 	height: 256,
 	name: 'blank-sheet'
 };
+var _user$project$TrackerTypes$initColumn = function (index) {
+	return {droppedRight: false, index: index};
+};
+var _user$project$TrackerTypes$initRow = function (index) {
+	return {droppedDown: false, index: index};
+};
 var _user$project$TrackerTypes$initialModel = function (name) {
 	return {
 		radix: 16,
@@ -7942,12 +7948,28 @@ var _user$project$TrackerTypes$initialModel = function (name) {
 		droppedDown: false,
 		otherSheets: _elm_lang$core$Native_List.fromArray(
 			['blank-sheet']),
-		name: name
+		name: name,
+		rows: A2(
+			_elm_lang$core$List$map,
+			_user$project$TrackerTypes$initRow,
+			_elm_lang$core$Native_List.range(0, 8)),
+		columns: A2(
+			_elm_lang$core$List$map,
+			_user$project$TrackerTypes$initColumn,
+			_elm_lang$core$Native_List.range(0, 255))
 	};
 };
-var _user$project$TrackerTypes$Model = F6(
-	function (a, b, c, d, e, f) {
-		return {radix: a, radixField: b, sheet: c, droppedDown: d, otherSheets: e, name: f};
+var _user$project$TrackerTypes$Model = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {radix: a, radixField: b, sheet: c, droppedDown: d, otherSheets: e, name: f, rows: g, columns: h};
+	});
+var _user$project$TrackerTypes$RowModel = F2(
+	function (a, b) {
+		return {droppedDown: a, index: b};
+	});
+var _user$project$TrackerTypes$ColumnModel = F2(
+	function (a, b) {
+		return {droppedRight: a, index: b};
 	});
 var _user$project$TrackerTypes$NoOp = {ctor: 'NoOp'};
 var _user$project$TrackerTypes$Open = {ctor: 'Open'};
@@ -7990,7 +8012,15 @@ var _user$project$Dummies$dummyTracker = {
 	droppedDown: false,
 	otherSheets: _elm_lang$core$Native_List.fromArray(
 		['blank-sheet']),
-	name: 'DUMMIE'
+	name: 'DUMMIE',
+	rows: A2(
+		_elm_lang$core$List$map,
+		_user$project$TrackerTypes$initRow,
+		_elm_lang$core$Native_List.range(0, 3)),
+	columns: A2(
+		_elm_lang$core$List$map,
+		_user$project$TrackerTypes$initColumn,
+		_elm_lang$core$Native_List.range(0, 63))
 };
 var _user$project$Dummies$blankSheet = {
 	data: A2(

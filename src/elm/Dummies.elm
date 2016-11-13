@@ -1,8 +1,8 @@
 module Dummies exposing (..)
 
 import Aliases exposing (..)
-import TrackerTypes exposing (Model)
-import List exposing (repeat)
+import TrackerTypes exposing (Model, RowModel, ColumnModel, initRow, initColumn)
+import List exposing (repeat, map)
 import Array exposing (Array)
 import Maybe exposing (withDefault)
 
@@ -30,6 +30,8 @@ dummyTracker =
   , droppedDown = False
   , otherSheets = [ "blank-sheet" ]
   , name        = "DUMMIE"
+  , rows        = map initRow [ 0 .. 3 ]
+  , columns     = map initColumn [ 0 .. 63 ]
   }
 
 dummyRow : Int -> Array String
