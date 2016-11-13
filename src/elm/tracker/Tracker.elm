@@ -97,36 +97,28 @@ update message model =
       packModel
       { model 
       | columns = 
-          fromList model.columns
-          |>set index True
-          |>toList
+          set index True model.columns
       }
       
     ColumnIndexMouseOut index ->
       packModel
       { model 
       | columns = 
-          fromList model.columns
-          |>set index False
-          |>toList
+          set index False model.columns
       }
 
     RowIndexMouseOver index ->
       packModel
       { model
       | rows = 
-          fromList model.rows
-          |>set index True
-          |>toList
+          set index True model.rows
       }
 
     RowIndexMouseOut index ->
       packModel
       { model
       | rows = 
-          fromList model.rows
-          |>set index False
-          |>toList
+          set index False model.rows
       }
       
     NoOp ->

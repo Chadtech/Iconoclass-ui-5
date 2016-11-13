@@ -6,6 +6,7 @@ import Html.Events       exposing (..)
 import Html.App          as App
 import Aliases           exposing (..)
 import List              exposing (map, map2)
+import Array             exposing (toList)
 import TrackerComponents exposing (..)
 import TrackerHeader
 import TrackerTypes      exposing (..)
@@ -27,14 +28,14 @@ header model =
   div 
   [ class "tracker-header" ] 
   [ TrackerHeader.view model
-  , columnNumbers model.columns
+  , columnNumbers (toList model.columns)
   ]
 
 body : Model -> Html Msg
 body model =
   let {sheet, radix, rows} = model in
   toCells sheet
-  |>map2 (,) rows
+  |>map2 (,) (toList rows)
   |>map (rowView radix)
   |>div [ class "tracker" ]
 

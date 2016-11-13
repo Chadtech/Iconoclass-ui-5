@@ -3,7 +3,7 @@ module Dummies exposing (..)
 import Aliases exposing (..)
 import TrackerTypes exposing (Model)
 import List exposing (repeat, map)
-import Array exposing (Array)
+import Array exposing (Array, fromList)
 import Maybe exposing (withDefault)
 
 blankSheet : Sheet
@@ -30,8 +30,8 @@ dummyTracker =
   , droppedDown = False
   , otherSheets = [ "blank-sheet" ]
   , name        = "DUMMIE"
-  , rows        = repeat 4 False
-  , columns     = repeat 64 False
+  , rows        = repeat 4 False |> fromList
+  , columns     = repeat 64 False |> fromList
   }
 
 dummyRow : Int -> Array String
