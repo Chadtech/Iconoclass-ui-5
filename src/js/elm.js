@@ -7954,6 +7954,13 @@ var _user$project$TrackerTypes$Model = F8(
 		return {radix: a, radixField: b, sheet: c, droppedDown: d, otherSheets: e, name: f, rowHoverOvers: g, columnHoverOvers: h};
 	});
 var _user$project$TrackerTypes$NoOp = {ctor: 'NoOp'};
+var _user$project$TrackerTypes$ReportKeyUp = function (a) {
+	return {ctor: 'ReportKeyUp', _0: a};
+};
+var _user$project$TrackerTypes$ReportKeyDown = F2(
+	function (a, b) {
+		return {ctor: 'ReportKeyDown', _0: a, _1: b};
+	});
 var _user$project$TrackerTypes$RemoveColumn = function (a) {
 	return {ctor: 'RemoveColumn', _0: a};
 };
@@ -8034,11 +8041,18 @@ var _user$project$Dummies$blankSheet = {
 	name: 'blank-sheet'
 };
 
-var _user$project$Types$Model = F3(
-	function (a, b, c) {
-		return {sheets: a, directory: b, trackerModels: c};
+var _user$project$Types$Model = F4(
+	function (a, b, c, d) {
+		return {sheets: a, directory: b, trackerModels: c, metaKeyDown: d};
 	});
 var _user$project$Types$NoOp = {ctor: 'NoOp'};
+var _user$project$Types$HandleKeyUp = function (a) {
+	return {ctor: 'HandleKeyUp', _0: a};
+};
+var _user$project$Types$HandleKeyDown = F2(
+	function (a, b) {
+		return {ctor: 'HandleKeyDown', _0: a, _1: b};
+	});
 var _user$project$Types$OpenSheets = function (a) {
 	return {ctor: 'OpenSheets', _0: a};
 };
@@ -8095,13 +8109,14 @@ var _user$project$Init$initialModel = {
 				_1: _user$project$TrackerTypes$initialModel('right')
 			}
 			])),
-	directory: ''
+	directory: '',
+	metaKeyDown: false
 };
 
 var _user$project$Ports$focus = _elm_lang$core$Native_Platform.outgoingPort(
 	'focus',
 	function (v) {
-		return {sheet: v.sheet, row: v.row, col: v.col};
+		return [v._0, v._1, v._2];
 	});
 var _user$project$Ports$save = _elm_lang$core$Native_Platform.outgoingPort(
 	'save',
@@ -8289,37 +8304,32 @@ var _user$project$TrackerComponents$columnIndexView = function (_p0) {
 		_elm_lang$core$Native_List.fromArray(
 			[child]));
 };
-var _user$project$TrackerComponents$columnView = F2(
-	function (radix, _p4) {
-		var _p5 = _p4;
-		var _p7 = _p5.ri;
-		var _p6 = _p5.content;
-		var subclass = _elm_lang$core$Native_Utils.eq(_p6, '') ? ((!_elm_lang$core$Native_Utils.eq(
-			A2(_elm_lang$core$Basics_ops['%'], _p7, radix),
-			0)) ? '' : ' zero-row') : ' highlight';
-		return A2(
-			_elm_lang$html$Html$div,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$html$Html_Attributes$class(
-					A2(_elm_lang$core$Basics_ops['++'], 'column', subclass))
-				]),
-			_elm_lang$core$Native_List.fromArray(
-				[
-					A2(
-					_elm_lang$html$Html$input,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html_Attributes$class(
-							A2(_elm_lang$core$Basics_ops['++'], 'cell ', subclass)),
-							_elm_lang$html$Html_Attributes$value(_p6),
-							_elm_lang$html$Html_Events$onInput(
-							A2(_user$project$TrackerTypes$UpdateCell, _p7, _p5.ci))
-						]),
-					_elm_lang$core$Native_List.fromArray(
-						[]))
-				]));
-	});
+var _user$project$TrackerComponents$reportKeyDown = function (dataIndex) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'keydown',
+		A2(
+			_elm_lang$core$Json_Decode$map,
+			_user$project$TrackerTypes$ReportKeyDown(dataIndex),
+			_elm_lang$html$Html_Events$keyCode));
+};
+var _user$project$TrackerComponents$reportKeyUp = A2(
+	_elm_lang$html$Html_Events$on,
+	'keyup',
+	A2(_elm_lang$core$Json_Decode$map, _user$project$TrackerTypes$ReportKeyUp, _elm_lang$html$Html_Events$keyCode));
+var _user$project$TrackerComponents$columnClean = _elm_lang$html$Html$div(
+	_elm_lang$core$Native_List.fromArray(
+		[
+			_elm_lang$html$Html_Attributes$class('column clean')
+		]));
+var _user$project$TrackerComponents$column = function (subclass) {
+	return _elm_lang$html$Html$div(
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class(
+				A2(_elm_lang$core$Basics_ops['++'], 'column ', subclass))
+			]));
+};
 var _user$project$TrackerComponents$columnNumbers = function (columns) {
 	var indices = _elm_lang$core$Native_List.range(0, 8);
 	return A2(
@@ -8334,11 +8344,8 @@ var _user$project$TrackerComponents$columnNumbers = function (columns) {
 					return A2(_elm_lang$core$List_ops['::'], x, y);
 				}),
 			A2(
-				_elm_lang$html$Html$div,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$class('column index')
-					]),
+				_user$project$TrackerComponents$column,
+				'index',
 				_elm_lang$core$Native_List.fromArray(
 					[])),
 			A2(
@@ -8353,28 +8360,56 @@ var _user$project$TrackerComponents$columnNumbers = function (columns) {
 					columns,
 					_elm_lang$core$Native_List.range(0, 8)))));
 };
-var _user$project$TrackerComponents$columnClean = _elm_lang$html$Html$div(
-	_elm_lang$core$Native_List.fromArray(
-		[
-			_elm_lang$html$Html_Attributes$class('column clean')
-		]));
-var _user$project$TrackerComponents$column = _elm_lang$html$Html$div(
-	_elm_lang$core$Native_List.fromArray(
-		[
-			_elm_lang$html$Html_Attributes$class('column')
-		]));
+var _user$project$TrackerComponents$columnView = F3(
+	function (trackerName, radix, _p4) {
+		var _p5 = _p4;
+		var _p8 = _p5.ri;
+		var _p7 = _p5.content;
+		var _p6 = _p5.ci;
+		var dataIndex = function () {
+			var ci_ = _elm_lang$core$Basics$toString(_p6);
+			var ri_ = _elm_lang$core$Basics$toString(_p8);
+			return _elm_lang$core$String$concat(
+				_elm_lang$core$Native_List.fromArray(
+					[trackerName, '-', ri_, '-', ci_]));
+		}();
+		var subclass = _elm_lang$core$Native_Utils.eq(_p7, '') ? ((!_elm_lang$core$Native_Utils.eq(
+			A2(_elm_lang$core$Basics_ops['%'], _p8, radix),
+			0)) ? '' : ' zero-row') : ' highlight';
+		return A2(
+			_user$project$TrackerComponents$column,
+			subclass,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					A2(
+					_elm_lang$html$Html$input,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$class(
+							A2(_elm_lang$core$Basics_ops['++'], 'cell ', subclass)),
+							_elm_lang$html$Html_Attributes$value(_p7),
+							_elm_lang$html$Html_Events$onInput(
+							A2(_user$project$TrackerTypes$UpdateCell, _p8, _p6)),
+							_user$project$TrackerComponents$reportKeyDown(dataIndex),
+							_user$project$TrackerComponents$reportKeyUp,
+							A2(_elm_lang$html$Html_Attributes$attribute, 'data-index', dataIndex)
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[]))
+				]));
+	});
 var _user$project$TrackerComponents$radixToString = function (ri) {
 	return A2(
 		_elm_lang$core$Maybe$withDefault,
 		'z',
 		A2(_elm_lang$core$Dict$get, ri, _user$project$Util$numberToHexString));
 };
-var _user$project$TrackerComponents$getRowIndex = function (_p8) {
+var _user$project$TrackerComponents$getRowIndex = function (_p9) {
 	return function (_) {
 		return _.ri;
 	}(
 		_user$project$Dummies$dummyCell(
-			_elm_lang$core$List$head(_p8)));
+			_elm_lang$core$List$head(_p9)));
 };
 var _user$project$TrackerComponents$formatRowIndex = F2(
 	function (r, row) {
@@ -8433,9 +8468,9 @@ var _user$project$TrackerComponents$rowOptions = function (index) {
 var _user$project$TrackerComponents$rowIndexView = F3(
 	function (radix, show, cells) {
 		var subclass = show ? 'clean' : 'index';
-		var _p9 = A2(_user$project$TrackerComponents$formatRowIndex, radix, cells);
-		var index = _p9._0;
-		var iStr = _p9._1;
+		var _p10 = A2(_user$project$TrackerComponents$formatRowIndex, radix, cells);
+		var index = _p10._0;
+		var iStr = _p10._1;
 		var child = show ? A2(
 			_elm_lang$html$Html$div,
 			_elm_lang$core$Native_List.fromArray(
@@ -8469,10 +8504,10 @@ var _user$project$TrackerComponents$rowIndexView = F3(
 			_elm_lang$core$Native_List.fromArray(
 				[child]));
 	});
-var _user$project$TrackerComponents$rowView = F2(
-	function (r, _p10) {
-		var _p11 = _p10;
-		var _p12 = _p11._1;
+var _user$project$TrackerComponents$rowView = F3(
+	function (trackerName, r, _p11) {
+		var _p12 = _p11;
+		var _p13 = _p12._1;
 		return A2(
 			_elm_lang$html$Html$div,
 			_elm_lang$core$Native_List.fromArray(
@@ -8484,11 +8519,11 @@ var _user$project$TrackerComponents$rowView = F2(
 					function (x, y) {
 						return A2(_elm_lang$core$List_ops['::'], x, y);
 					}),
-				A3(_user$project$TrackerComponents$rowIndexView, r, _p11._0, _p12),
+				A3(_user$project$TrackerComponents$rowIndexView, r, _p12._0, _p13),
 				A2(
 					_elm_lang$core$List$map,
-					_user$project$TrackerComponents$columnView(r),
-					_p12)));
+					A2(_user$project$TrackerComponents$columnView, trackerName, r),
+					_p13)));
 	});
 
 var _user$project$TrackerHeader$downOption = function (str) {
@@ -8576,7 +8611,9 @@ var _user$project$TrackerHeader$view = function (tracker) {
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_user$project$TrackerComponents$column(
+				A2(
+				_user$project$TrackerComponents$column,
+				'',
 				_elm_lang$core$Native_List.fromArray(
 					[
 						A2(
@@ -8590,7 +8627,9 @@ var _user$project$TrackerHeader$view = function (tracker) {
 								_elm_lang$html$Html$text('radix')
 							]))
 					])),
-				_user$project$TrackerComponents$column(
+				A2(
+				_user$project$TrackerComponents$column,
+				'',
 				_elm_lang$core$Native_List.fromArray(
 					[
 						A2(
@@ -8656,6 +8695,7 @@ var _user$project$TrackerView$body = function (model) {
 	var sheet = _p2.sheet;
 	var radix = _p2.radix;
 	var rowHoverOvers = _p2.rowHoverOvers;
+	var name = _p2.name;
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -8664,7 +8704,7 @@ var _user$project$TrackerView$body = function (model) {
 			]),
 		A2(
 			_elm_lang$core$List$map,
-			_user$project$TrackerComponents$rowView(radix),
+			A2(_user$project$TrackerComponents$rowView, name, radix),
 			A3(
 				_elm_lang$core$List$map2,
 				F2(
@@ -9263,6 +9303,22 @@ var _user$project$Tracker$update = F2(
 									8,
 									A2(_user$project$UpdateUtil$removeColumn, _p0._0, sheet.data))
 							})));
+			case 'ReportKeyDown':
+				return A2(
+					F2(
+						function (v0, v1) {
+							return {ctor: '_Tuple2', _0: v0, _1: v1};
+						}),
+					model,
+					A2(_user$project$Types$HandleKeyDown, _p0._0, _p0._1));
+			case 'ReportKeyUp':
+				return A2(
+					F2(
+						function (v0, v1) {
+							return {ctor: '_Tuple2', _0: v0, _1: v1};
+						}),
+					model,
+					_user$project$Types$HandleKeyUp(_p0._0));
 			default:
 				return _user$project$UpdateUtil$packModel(model);
 		}
@@ -9304,63 +9360,130 @@ var _user$project$Update$insertSheet = F2(
 	function (sheet, sheets) {
 		return A3(_elm_lang$core$Dict$insert, sheet.name, sheet, sheets);
 	});
+var _user$project$Update$handleKeyDown = F3(
+	function (model, dataIndices, code) {
+		var bundle = A2(
+			F3(
+				function (v0, v1, v2) {
+					return {ctor: '_Tuple3', _0: v0, _1: v1, _2: v2};
+				}),
+			model.metaKeyDown,
+			dataIndices);
+		var focus_ = function (_p4) {
+			return _user$project$Ports$focus(
+				bundle(_p4));
+		};
+		var _p5 = code;
+		switch (_p5) {
+			case 37:
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: focus_('left')
+				};
+			case 38:
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: focus_('up')
+				};
+			case 39:
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: focus_('right')
+				};
+			case 40:
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: focus_('down')
+				};
+			case 13:
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: focus_('enter')
+				};
+			case 91:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{metaKeyDown: true}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+		}
+	});
+var _user$project$Update$handleKeyUp = F2(
+	function (model, code) {
+		return _elm_lang$core$Native_Utils.eq(code, 91) ? {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Native_Utils.update(
+				model,
+				{metaKeyDown: false}),
+			_1: _elm_lang$core$Platform_Cmd$none
+		} : {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+	});
 var _user$project$Update$update = F2(
 	function (message, model) {
 		update:
 		while (true) {
-			var _p4 = message;
-			switch (_p4.ctor) {
+			var _p6 = message;
+			switch (_p6.ctor) {
 				case 'TrackerMsg':
-					var _p6 = _p4._0;
-					var _p5 = A3(_user$project$Update$updateTracker, _p6, _p4._1, model);
-					var tracker$ = _p5._0;
-					var message$ = _p5._1;
-					var _v2 = message$,
-						_v3 = _elm_lang$core$Native_Utils.update(
+					var _p8 = _p6._0;
+					var _p7 = A3(_user$project$Update$updateTracker, _p8, _p6._1, model);
+					var tracker$ = _p7._0;
+					var message$ = _p7._1;
+					var _v3 = message$,
+						_v4 = _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							trackerModels: A3(_elm_lang$core$Dict$insert, _p6, tracker$, model.trackerModels)
+							trackerModels: A3(_elm_lang$core$Dict$insert, _p8, tracker$, model.trackerModels)
 						});
-					message = _v2;
-					model = _v3;
+					message = _v3;
+					model = _v4;
 					continue update;
 				case 'UpdateSheet':
-					var _p8 = _p4._0;
-					var _p7 = _p8;
-					var name = _p7.name;
-					var _v4 = _user$project$Types$SyncTrackers,
-						_v5 = _elm_lang$core$Native_Utils.update(
+					var _p10 = _p6._0;
+					var _p9 = _p10;
+					var name = _p9.name;
+					var _v5 = _user$project$Types$SyncTrackers,
+						_v6 = _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							sheets: A3(_elm_lang$core$Dict$insert, name, _p8, model.sheets)
+							sheets: A3(_elm_lang$core$Dict$insert, name, _p10, model.sheets)
 						});
-					message = _v4;
-					model = _v5;
+					message = _v5;
+					model = _v6;
 					continue update;
 				case 'UpdateSheetName':
-					var _p10 = _p4._1;
-					var _p9 = _p4._0;
-					var _v6 = _user$project$Types$SyncTrackers,
-						_v7 = _elm_lang$core$Native_Utils.update(
+					var _p12 = _p6._1;
+					var _p11 = _p6._0;
+					var _v7 = _user$project$Types$SyncTrackers,
+						_v8 = _elm_lang$core$Native_Utils.update(
 						model,
 						{
 							sheets: A3(
 								_elm_lang$core$Dict$insert,
-								_p10.name,
-								_p10,
-								A2(_elm_lang$core$Dict$remove, _p9, model.sheets)),
+								_p12.name,
+								_p12,
+								A2(_elm_lang$core$Dict$remove, _p11, model.sheets)),
 							trackerModels: A2(
 								_elm_lang$core$Dict$map,
-								A2(_user$project$Update$fixTracker, _p9, _p10),
+								A2(_user$project$Update$fixTracker, _p11, _p12),
 								model.trackerModels)
 						});
-					message = _v6;
-					model = _v7;
+					message = _v7;
+					model = _v8;
 					continue update;
 				case 'SyncTrackers':
-					var _p11 = model;
-					var trackerModels = _p11.trackerModels;
-					var sheets = _p11.sheets;
+					var _p13 = model;
+					var trackerModels = _p13.trackerModels;
+					var sheets = _p13.sheets;
 					return _user$project$Update$packModel(
 						_elm_lang$core$Native_Utils.update(
 							model,
@@ -9371,27 +9494,27 @@ var _user$project$Update$update = F2(
 									trackerModels)
 							}));
 				case 'NewSheet':
-					var _p13 = _p4._0;
-					var _p12 = model;
-					var sheets = _p12.sheets;
-					var _v8 = _user$project$Types$SyncTrackers,
-						_v9 = _elm_lang$core$Native_Utils.update(
+					var _p15 = _p6._0;
+					var _p14 = model;
+					var sheets = _p14.sheets;
+					var _v9 = _user$project$Types$SyncTrackers,
+						_v10 = _elm_lang$core$Native_Utils.update(
 						model,
 						{
 							sheets: A3(
 								_elm_lang$core$Dict$insert,
-								_p13,
-								_user$project$Aliases$newSheet(_p13),
+								_p15,
+								_user$project$Aliases$newSheet(_p15),
 								sheets)
 						});
-					message = _v8;
-					model = _v9;
+					message = _v9;
+					model = _v10;
 					continue update;
 				case 'RemoveSheet':
-					var _p14 = _p4._0;
-					var newSheets = A2(_elm_lang$core$Dict$remove, _p14, model.sheets);
-					var _v10 = _user$project$Types$SyncTrackers,
-						_v11 = _elm_lang$core$Native_Utils.update(
+					var _p16 = _p6._0;
+					var newSheets = A2(_elm_lang$core$Dict$remove, _p16, model.sheets);
+					var _v11 = _user$project$Types$SyncTrackers,
+						_v12 = _elm_lang$core$Native_Utils.update(
 						model,
 						{
 							sheets: newSheets,
@@ -9403,15 +9526,15 @@ var _user$project$Update$update = F2(
 										_elm_lang$core$Dict$values(newSheets)));
 								return A2(
 									_elm_lang$core$Dict$map,
-									A2(_user$project$Update$fixTracker, _p14, firstSheet),
+									A2(_user$project$Update$fixTracker, _p16, firstSheet),
 									model.trackerModels);
 							}()
 						});
-					message = _v10;
-					model = _v11;
+					message = _v11;
+					model = _v12;
 					continue update;
 				case 'SaveSheet':
-					var payload = {sheet: _p4._0, directory: model.directory};
+					var payload = {sheet: _p6._0, directory: model.directory};
 					return {
 						ctor: '_Tuple2',
 						_0: model,
@@ -9421,26 +9544,30 @@ var _user$project$Update$update = F2(
 					return {
 						ctor: '_Tuple2',
 						_0: model,
-						_1: _user$project$Ports$open(_p4._0)
+						_1: _user$project$Ports$open(_p6._0)
 					};
 				case 'OpenSheets':
-					var _v12 = _user$project$Types$SyncTrackers,
-						_v13 = _elm_lang$core$Native_Utils.update(
+					var _v13 = _user$project$Types$SyncTrackers,
+						_v14 = _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							sheets: A3(_elm_lang$core$List$foldr, _user$project$Update$insertSheet, model.sheets, _p4._0)
+							sheets: A3(_elm_lang$core$List$foldr, _user$project$Update$insertSheet, model.sheets, _p6._0)
 						});
-					message = _v12;
-					model = _v13;
+					message = _v13;
+					model = _v14;
 					continue update;
 				case 'SetDirectory':
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
-							{directory: _p4._0}),
+							{directory: _p6._0}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
+				case 'HandleKeyDown':
+					return A3(_user$project$Update$handleKeyDown, model, _p6._0, _p6._1);
+				case 'HandleKeyUp':
+					return A2(_user$project$Update$handleKeyUp, model, _p6._0);
 				default:
 					return _user$project$Update$packModel(model);
 			}

@@ -16,11 +16,14 @@ type Msg
   | SetDirectory String
   | OpenDialog String
   | OpenSheets (List Sheet)
+  | HandleKeyDown String Int
+  | HandleKeyUp Int
   | NoOp
 
 type alias Model =
-  { sheets : Dict String Sheet 
-  , directory : String
+  { sheets        : Dict String Sheet 
+  , directory     : String
   , trackerModels : Dict String Tracker.Model
+  , metaKeyDown   : Bool
   }
 

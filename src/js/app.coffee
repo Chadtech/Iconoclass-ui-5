@@ -6,7 +6,55 @@ fs        = get 'fs'
 dialog    = remote.require 'dialog'
 
 
-{save, open} = app.ports
+{save, open, focus} = app.ports
+
+
+focus.subscribe (payload) ->
+  console.log payload
+
+  metaKeyDown = payload[0]
+  dataIndices = payload[1]
+  direction   = payload[2]
+
+  indices = dataIndices.split '-'
+  tracker = indices[0]
+  ri      = parseInt indices[1], 10
+  ci      = parseInt indices[2], 10
+
+
+  switch direction
+    when "left"
+      if metaKeyDown
+        ci = ci - 2
+      else
+        ci--
+    when "right"
+      if metaKeyDown
+        ci = ci + 2
+      else
+        ci++
+    when "down"
+      if metaKeyDown
+        ri = ri + 10
+      else
+        ri++
+    when "up"
+      if metaKeyDown
+        ri = ri - 10
+      else
+        ri--
+    when "enter"
+      ri++
+
+  newDataIndices = [ tracker, ri, ci ].join '-'
+
+  query = "[data-index=" + newDataIndices + "]"
+
+  el = (document.querySelectorAll query)[0]
+
+  el.focus() if el?
+
+
 
 justFileName = (filePath) ->
   i = filePath.length - 1

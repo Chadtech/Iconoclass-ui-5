@@ -160,7 +160,15 @@ update message model =
       }
       |>Types.UpdateSheet
       |>(,) model
-      
+
+    ReportKeyDown dataIndex code ->
+      Types.HandleKeyDown dataIndex code
+      |>(,) model
+
+    ReportKeyUp code ->
+      Types.HandleKeyUp code
+      |>(,) model
+
     NoOp ->
       packModel model
 

@@ -11,15 +11,16 @@ import Dict             exposing (Dict, get)
 import List             exposing (map, map2, length, head)
 import Array            exposing (fromList)
 import Dummies          exposing (dummyCell)
-
+import String           exposing (concat)
+import Json.Decode      as Json
 
 
 --          ROW
 
 
-rowView : Radix -> (Bool, Cells) -> Html Msg
-rowView r (showDropDown, columns) =
-  map (columnView r) columns
+rowView : String -> Radix -> (Bool, Cells) -> Html Msg
+rowView trackerName r (showDropDown, columns) =
+  map (columnView trackerName r) columns
   |>(::) (rowIndexView r showDropDown columns)
   |>div [ class "row" ]
 
@@ -97,8 +98,9 @@ radixToString ri =
 --          COLUMN
 
 
-column : List (Html Msg) -> Html Msg
-column = div [ class "column" ]
+column : String -> List (Html Msg) -> Html Msg
+column subclass = 
+  div [ class <| "column " ++ subclass ]
 
 columnClean : List (Html Msg) -> Html Msg
 columnClean = div [ class "column clean" ]
@@ -108,12 +110,12 @@ columnNumbers columns =
   let indices = [ 0 .. 8 ] in
   map2 (,) columns [ 0 .. 8 ]
   |>map columnIndexView
-  |>(::) (div [ class "column index" ] [])
+  |>(::) (column "index" [])
   |>div [ class "row" ]
 
 
-columnView : Radix -> Cell -> Html Msg
-columnView radix {ri, ci, content} =
+columnView : String -> Radix -> Cell -> Html Msg
+columnView trackerName radix {ri, ci, content} =
   let
     subclass = 
       if content == "" then 
@@ -121,16 +123,41 @@ columnView radix {ri, ci, content} =
         else
           " zero-row"
       else " highlight"
+
+    dataIndex =
+      let
+        ri_ = toString ri
+        ci_ = toString ci
+      in
+        concat 
+        [ trackerName
+        , "-"
+        , ri_
+        , "-"
+        , ci_
+        ]
   in
-  div
-  [ class ("column" ++ subclass) ]
+  column subclass
   [ input 
     [ class ("cell " ++ subclass)
     , value content 
     , onInput (UpdateCell ri ci)
+    , reportKeyDown dataIndex
+    , reportKeyUp
+    , attribute "data-index" dataIndex
     ] 
     [] 
   ]
+
+reportKeyUp : Attribute Msg
+reportKeyUp =
+  Json.map ReportKeyUp keyCode
+  |>on "keyup"
+
+reportKeyDown : String -> Attribute Msg
+reportKeyDown dataIndex =
+  Json.map (ReportKeyDown dataIndex) keyCode
+  |>on "keydown"
 
 columnIndexView : (Bool, Int) -> Html Msg
 columnIndexView (show, index) =

@@ -34,10 +34,10 @@ header model =
 
 body : Model -> Html Msg
 body model =
-  let {sheet, radix, rowHoverOvers} = model in
+  let {sheet, radix, rowHoverOvers, name} = model in
   toCells sheet
   |>map2 (,) (toList rowHoverOvers)
-  |>map (rowView radix)
+  |>map (rowView name radix)
   |>div [ class "tracker" ]
 
 

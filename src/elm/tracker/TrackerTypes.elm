@@ -53,4 +53,6 @@ type Msg
   | RemoveRow Int
   | NewColumn Int
   | RemoveColumn Int
+  | ReportKeyDown String Int
+  | ReportKeyUp Int
   | NoOp

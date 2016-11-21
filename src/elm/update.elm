@@ -11,6 +11,7 @@ import TrackerTypes
 import Tracker
 import Dict             exposing (Dict, map, get, insert, remove, keys, values)
 import List             exposing (head, foldr)
+import String           exposing (split)
 import Aliases          exposing (..)
 import Maybe            exposing (withDefault)
 import Dummies          exposing (dummyTracker, errorSheet, blankSheet)
@@ -108,7 +109,42 @@ update message model =
     SetDirectory directory ->
       ({model | directory = directory}, Cmd.none)
 
+    HandleKeyDown dataIndices code ->
+      handleKeyDown model dataIndices code
+
+    HandleKeyUp code ->
+      handleKeyUp model code
+
     NoOp -> packModel model
+
+
+handleKeyUp : Model -> Int -> (Model, Cmd msg)
+handleKeyUp model code =
+  if code == 91 then
+    ({ model | metaKeyDown = False }, Cmd.none)
+  else
+    (model, Cmd.none)
+
+
+handleKeyDown : Model -> String -> Int -> (Model, Cmd msg)
+handleKeyDown model dataIndices code =
+  let
+    bundle =
+      (,,) model.metaKeyDown dataIndices
+
+    focus_ =
+      bundle >> focus
+  in
+  case code of
+    37 -> (model, focus_ "left")
+    38 -> (model, focus_ "up")
+    39 -> (model, focus_ "right")
+    40 -> (model, focus_ "down")
+    13 -> (model, focus_ "enter")
+    91 -> 
+      ({ model | metaKeyDown = True }, Cmd.none)
+    _  -> 
+      (model, Cmd.none)
 
 
 insertSheet : Sheet -> Dict String Sheet -> Dict String Sheet

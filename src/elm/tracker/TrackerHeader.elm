@@ -16,12 +16,12 @@ view : Model -> Html Msg
 view tracker =
   div
   [ class "row" ]
-  [ column
+  [ column ""
     [ p
       [ class "point ignorable" ]
       [ text "radix"]
     ]
-  , column
+  , column ""
     [ input
       [ class "field"
       , value tracker.radixField

@@ -18,7 +18,8 @@ initialModel =
       , ("middle", Tracker.initialModel "middle")
       , ("right", Tracker.initialModel "right")
       ]
-  , directory = ""
+  , directory   = ""
+  , metaKeyDown = False
   }
 
 
