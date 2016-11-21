@@ -9482,8 +9482,6 @@ Elm['Types'] = Elm['Types'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Types'], 'Types', typeof _user$project$Types$main === 'undefined' ? null : _user$project$Types$main);
 Elm['Update'] = Elm['Update'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Update'], 'Update', typeof _user$project$Update$main === 'undefined' ? null : _user$project$Update$main);
-Elm['UpdateUtil'] = Elm['UpdateUtil'] || {};
-_elm_lang$core$Native_Platform.addPublicModule(Elm['UpdateUtil'], 'UpdateUtil', typeof _user$project$UpdateUtil$main === 'undefined' ? null : _user$project$UpdateUtil$main);
 Elm['Util'] = Elm['Util'] || {};
 _elm_lang$core$Native_Platform.addPublicModule(Elm['Util'], 'Util', typeof _user$project$Util$main === 'undefined' ? null : _user$project$Util$main);
 Elm['View'] = Elm['View'] || {};
