@@ -27,7 +27,7 @@ open.subscribe (trackerName) ->
 
   dialog.showOpenDialog options, (filePaths) ->
     filePaths = _.filter filePaths, (fp) ->
-      '.csv' is fp.slice fp.length - 4
+      '.scr' is fp.slice fp.length - 4
 
     sheets = _.map filePaths, (filePath) ->
       csv  = fs.readFileSync filePath, 'utf-8'
@@ -58,7 +58,7 @@ save.subscribe (payload) ->
       directory + 
       '/' + 
       sheet.name +
-      '.csv'
+      '.scr'
 
     fs.writeFileSync fileName, data
 
