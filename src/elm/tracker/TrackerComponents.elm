@@ -13,23 +13,6 @@ import Array            exposing (fromList)
 import Dummies          exposing (dummyCell)
 
 
---          COLUMN
-
-
-column : List (Html Msg) -> Html Msg
-column = div [ class "column" ]
-
-columnClean : List (Html Msg) -> Html Msg
-columnClean = div [ class "column clean" ]
-
-columnNumbers : List Bool -> Html Msg
-columnNumbers columns =
-  let indices = [ 0 .. 8 ] in
-  map2 (,) columns [ 0 .. 8 ]
-  |>map columnIndexView
-  |>(::) (div [ class "column index" ] [])
-  |>div [ class "row" ]
-
 
 --          ROW
 
@@ -51,7 +34,7 @@ rowIndexView radix show cells =
       if show then
         div
         [ class "drop-down narrow" ]
-        [ rowOptions ]
+        [ rowOptions index ]
       else
       p
       [ class "index-cell" ]
@@ -69,20 +52,22 @@ rowIndexView radix show cells =
   ]
   [ child ]
 
-rowOptions : Html Msg
-rowOptions =
+rowOptions : Int -> Html Msg
+rowOptions index =
   div
   [ class "column-options" ]
   [ input 
     [ class "column-button close"
     , type' "submit"
     , value "x"
+    , onClick (RemoveRow index)
     ]
     []
   , input 
     [ class "column-button"
     , type' "submit"
     , value "v"
+    , onClick (NewRow index)
     ]
     []
   ]
@@ -112,6 +97,21 @@ radixToString ri =
 --          COLUMN
 
 
+column : List (Html Msg) -> Html Msg
+column = div [ class "column" ]
+
+columnClean : List (Html Msg) -> Html Msg
+columnClean = div [ class "column clean" ]
+
+columnNumbers : List Bool -> Html Msg
+columnNumbers columns =
+  let indices = [ 0 .. 8 ] in
+  map2 (,) columns [ 0 .. 8 ]
+  |>map columnIndexView
+  |>(::) (div [ class "column index" ] [])
+  |>div [ class "row" ]
+
+
 columnView : Radix -> Cell -> Html Msg
 columnView radix {ri, ci, content} =
   let
@@ -139,7 +139,7 @@ columnIndexView (show, index) =
       if show then
         div
         [ class "drop-down narrow" ]
-        [ columnOptions ]
+        [ columnOptions index ]
       else
         p 
         [ class "index-cell" ]
@@ -157,20 +157,22 @@ columnIndexView (show, index) =
   ]
   [ child ]
 
-columnOptions : Html Msg
-columnOptions =
+columnOptions : Int -> Html Msg
+columnOptions index =
   div
   [ class "column-options" ]
   [ input 
     [ class "column-button close"
     , type' "submit"
-    , value "x"
+    , value "<"
+    , onClick (NewColumn index) 
     ]
     []
   , input 
     [ class "column-button"
     , type' "submit"
-    , value ">"
+    , value "x"
+    , onClick (RemoveColumn index)
     ]
     []
   ]

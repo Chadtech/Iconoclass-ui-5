@@ -1,8 +1,8 @@
 module Types exposing (..)
 
-import List exposing (repeat)
-import Aliases exposing (..)
-import Dict exposing (Dict)
+import List         exposing (repeat)
+import Aliases      exposing (..)
+import Dict         exposing (Dict)
 import TrackerTypes as Tracker
 
 type Msg 

@@ -25,17 +25,18 @@ view model =
 
 header : Model -> Html Msg
 header model =
+  let {columnHoverOvers} = model in
   div 
   [ class "tracker-header" ] 
   [ TrackerHeader.view model
-  , columnNumbers (toList model.columns)
+  , columnNumbers (toList columnHoverOvers)
   ]
 
 body : Model -> Html Msg
 body model =
-  let {sheet, radix, rows} = model in
+  let {sheet, radix, rowHoverOvers} = model in
   toCells sheet
-  |>map2 (,) (toList rows)
+  |>map2 (,) (toList rowHoverOvers)
   |>map (rowView radix)
   |>div [ class "tracker" ]
 

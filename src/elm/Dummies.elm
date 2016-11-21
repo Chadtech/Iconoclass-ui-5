@@ -24,14 +24,14 @@ errorSheet =
 
 dummyTracker : Model
 dummyTracker =
-  { radix       = 16
-  , radixField  = "16"
-  , sheet       = errorSheet
-  , droppedDown = False
-  , otherSheets = [ "blank-sheet" ]
-  , name        = "DUMMIE"
-  , rows        = repeat 4 False |> fromList
-  , columns     = repeat 64 False |> fromList
+  { radix            = 16
+  , radixField       = "16"
+  , sheet            = errorSheet
+  , droppedDown      = False
+  , otherSheets      = [ "blank-sheet" ]
+  , name             = "DUMMIE"
+  , rowHoverOvers    = repeat 9 False |> fromList
+  , columnHoverOvers = repeat 64 False |> fromList
   }
 
 dummyRow : Int -> Array String

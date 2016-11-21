@@ -5,26 +5,26 @@ import List exposing (repeat, map)
 import Array exposing (Array, fromList)
 
 type alias Model =
-  { radix       : Int
-  , radixField  : String
-  , sheet       : Sheet
-  , droppedDown : Bool
-  , otherSheets : List String
-  , name        : String
-  , rows        : Array Bool
-  , columns     : Array Bool
+  { radix            : Int
+  , radixField       : String
+  , sheet            : Sheet
+  , droppedDown      : Bool
+  , otherSheets      : List String
+  , name             : String
+  , rowHoverOvers    : Array Bool
+  , columnHoverOvers : Array Bool
   }
 
 initialModel : String -> Model
 initialModel name = 
-  { radix       = 16
-  , radixField  = "16"
-  , sheet       = blankSheet
-  , droppedDown = False
-  , otherSheets = [ "blank-sheet" ]
-  , name        = name
-  , rows        = fromList (repeat 256 False) 
-  , columns     = fromList (repeat 9 False)
+  { radix            = 16
+  , radixField       = "16"
+  , sheet            = blankSheet
+  , droppedDown      = False
+  , otherSheets      = [ "blank-sheet" ]
+  , name             = name
+  , rowHoverOvers    = fromList (repeat 256 False) 
+  , columnHoverOvers = fromList (repeat 9 False)
   }
 
 blankSheet : Sheet
@@ -49,4 +49,8 @@ type Msg
   | ColumnIndexMouseOut Int
   | RowIndexMouseOver Int
   | RowIndexMouseOut Int
+  | NewRow Int
+  | RemoveRow Int
+  | NewColumn Int
+  | RemoveColumn Int
   | NoOp
