@@ -8390,8 +8390,6 @@ var _user$project$TrackerComponents$columnView = F3(
 							_elm_lang$html$Html_Attributes$value(_p7),
 							_elm_lang$html$Html_Events$onInput(
 							A2(_user$project$TrackerTypes$UpdateCell, _p8, _p6)),
-							_user$project$TrackerComponents$reportKeyDown(dataIndex),
-							_user$project$TrackerComponents$reportKeyUp,
 							A2(_elm_lang$html$Html_Attributes$attribute, 'data-index', dataIndex)
 						]),
 					_elm_lang$core$Native_List.fromArray(

@@ -142,8 +142,8 @@ columnView trackerName radix {ri, ci, content} =
     [ class ("cell " ++ subclass)
     , value content 
     , onInput (UpdateCell ri ci)
-    , reportKeyDown dataIndex
-    , reportKeyUp
+    --, reportKeyDown dataIndex
+    --, reportKeyUp
     , attribute "data-index" dataIndex
     ] 
     [] 
